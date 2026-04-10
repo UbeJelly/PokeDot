@@ -1,8 +1,12 @@
 class_name PokeDotClient extends HTTPRequest
 
 
+onready var pokemon_pagination := PokemonPagination.new()
+
+
 func _ready() -> void:
-	print("PokeDotClient() status: %s (0:ERROR, 1:OK)" % PokeDotClient("https://pokeapi.co/api/v2/", _get_pokemon_pagination("pokemon", 20, 0)))
+	# Default endpoint & query method
+	get_pokemon_pagination("pokemon", 20, 1)
 
 
 func PokeDotClient(BASE_URL: String = "https://pokeapi.co/api/v2/", endpoint: String = "") -> int:
@@ -14,23 +18,36 @@ func PokeDotClient(BASE_URL: String = "https://pokeapi.co/api/v2/", endpoint: St
 				["text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"]
 			), true, HTTPClient.METHOD_GET)
 
+		print("PokeDotClient() status: OK")
 		return 1
+
+	print("PokeDotClient() status: ERROR")
 	return 0
 
 
-func _get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offset: int = 0) -> String:
-	return "%s/?limit=%s&offset=%s" % [endpoint, limit, offset]
+func get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offset: int = 1) -> Dictionary:
+	PokeDotClient("https://pokeapi.co/api/v2/", "%s/?limit=%s&offset=%s" % [endpoint, limit, offset])
+	return pokemon_pagination.get_data()
 
 
 func _on_request_completed(result, response_code, headers, body) -> void:
-	if result == HTTPRequest.RESULT_SUCCESS:
-		print("HTTP request success. Error code: %s" % _get_result(result))
-	else:
-		print("HTTP request failed. Error code: %s" % _get_result(result))
+	var data: Dictionary = _parse_JSON(body)
 
-	print("HTTP response code: %s" % _get_response(response_code))
-	print(JSON.print(headers, "  ") + "\t")
-	print(JSON.print(_parse_JSON(body), "  "))
+	print("HTTP request code: %s" % _get_result(result))
+	print("HTTP response code: %s\n" % _get_response(response_code))
+	print("%s\n" % JSON.print(headers, "  "))
+	#print(JSON.print(data, "  "))
+
+	# Check contents if its pagination
+	if "count" and "next" and "previous" and "results" in data.keys():
+		if not data.get("results").empty() and "name" and "url" in data.get("results")[0]:
+			pokemon_pagination.set_data(
+				data.get("count"),
+				data.get("next"),
+				data.get("previous"),
+				data.get("results")
+			)
+			print(JSON.print(pokemon_pagination.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

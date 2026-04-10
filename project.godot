@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "PokeDotClient",
 "language": "GDScript",
 "path": "res://PokeDotClient.gd"
+}, {
+"base": "Node",
+"class": "PokemonPagination",
+"language": "GDScript",
+"path": "res://Resources/PokemonPagination.gd"
 } ]
 _global_script_class_icons={
-"PokeDotClient": ""
+"PokeDotClient": "",
+"PokemonPagination": ""
 }
 
 [application]
