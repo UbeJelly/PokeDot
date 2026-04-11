@@ -34,6 +34,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Resources/Characteristic.gd"
 }, {
+"base": "Node",
+"class": "ContestEffect",
+"language": "GDScript",
+"path": "res://Resources/ContestEffect.gd"
+}, {
 "base": "HTTPRequest",
 "class": "PokeDotClient",
 "language": "GDScript",
@@ -50,6 +55,7 @@ _global_script_class_icons={
 "BerryFirmness": "",
 "BerryFlavor": "",
 "Characteristic": "",
+"ContestEffect": "",
 "PokeDotClient": "",
 "PokemonPagination": ""
 }

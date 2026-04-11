@@ -7,6 +7,7 @@ onready var berry := Berry.new()
 onready var berry_flavor := BerryFlavor.new()
 onready var berry_firmness := BerryFirmness.new()
 onready var characteristic := Characteristic.new()
+onready var contest_effect := ContestEffect.new()
 
 
 func _ready() -> void:
@@ -83,6 +84,11 @@ func get_characteristic(id:int = 0) -> Dictionary:
 	return characteristic.get_data()
 
 
+func get_contest_effect(id:int = 0) -> Dictionary:
+	PokeDotClient("https://pokeapi.co/api/v2/", "contest-effect/%s/" % str(id))
+	return contest_effect.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -137,6 +143,17 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 					data.get("descriptions")
 				)
 				print(JSON.print(characteristic.get_data(), "  "))
+
+			# Contest effect
+			if "id" and "appeal" and "jam" and "effect_entries" and "flavor_text_entries" in data.keys():
+				contest_effect.set_data(
+					data.get("id"),
+					data.get("appeal"),
+					data.get("jam"),
+					data.get("effect_entries"),
+					data.get("flavor_text_entries")
+				)
+				print(JSON.print(contest_effect.get_data(), "  "))
 
 		9:
 			# Ability
