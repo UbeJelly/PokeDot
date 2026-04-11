@@ -2,11 +2,12 @@ class_name PokeDotClient extends HTTPRequest
 
 
 onready var pokemon_pagination := PokemonPagination.new()
+onready var ability := Ability.new()
 
 
 func _ready() -> void:
 	# Default endpoint & query method
-	get_pokemon_pagination("pokemon", 20, 1)
+	get_pokemon_pagination("pokemon", 20, 0)
 
 
 func PokeDotClient(BASE_URL: String = "https://pokeapi.co/api/v2/", endpoint: String = "") -> int:
@@ -20,19 +21,27 @@ func PokeDotClient(BASE_URL: String = "https://pokeapi.co/api/v2/", endpoint: St
 
 		print("PokeDotClient() status: OK")
 		return 1
-
 	print("PokeDotClient() status: ERROR")
 	return 0
 
 
-func get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offset: int = 1) -> Dictionary:
+func get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offset: int = 0) -> Dictionary:
 	PokeDotClient("https://pokeapi.co/api/v2/", "%s/?limit=%s&offset=%s" % [endpoint, limit, offset])
 	return pokemon_pagination.get_data()
 
 
+func get_ability(name_or_id) -> Dictionary:
+	if name_or_id is String:
+		PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % name_or_id)
+	if name_or_id is int:
+		PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % str(name_or_id))
+	if name_or_id == null or name_or_id == "":
+		printerr("ERROR: get_ability(<name_or_id>), <name_or_id> must be an int or String type.")
+	return ability.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
-
 	print("HTTP request code: %s" % _get_result(result))
 	print("HTTP response code: %s\n" % _get_response(response_code))
 	print("%s\n" % JSON.print(headers, "  "))
@@ -48,6 +57,21 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("results")
 			)
 			print(JSON.print(pokemon_pagination.get_data(), "  "))
+
+	# Check contents if its ability
+	if "id" and "name" and "is_main_series" and "generation" and "names" and "effect_entries" and "effect_changes" and "flavor_text_entries" and "pokemon" in data.keys():
+		ability.set_data(
+			data.get("id"),
+			data.get("name"),
+			data.get("is_main_series"),
+			data.get("generation"),
+			data.get("names"),
+			data.get("effect_entries"),
+			data.get("effect_changes"),
+			data.get("flavor_text_entries"),
+			data.get("pokemon")
+		)
+		print(JSON.print(ability.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

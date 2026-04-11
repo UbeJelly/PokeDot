@@ -7,10 +7,6 @@ export var data: Dictionary = {
 	"previous": "",
 	"results": [],
 }
-export var count: int = 0
-export var next: String = ""
-export var previous: String = ""
-export var results: Array = []
 
 
 func set_data(_count: int = 0, _next: String = "", _previous: String = "", _results: Array = []) -> void:
@@ -20,10 +16,6 @@ func set_data(_count: int = 0, _next: String = "", _previous: String = "", _resu
 		"previous": _previous,
 		"results": _results,
 	}
-	count = _count
-	next = _next
-	previous = _previous
-	results = _results
 
 
 func get_data() -> Dictionary:
