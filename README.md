@@ -24,6 +24,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_contest_type(name_or_id)` - get what categories judges used to weigh a Pokemon's condition in contests.
 - `get_egg_group(name_or_id)` - get the categories which determine which Pokemon are able to interbreed.
 - `get_encounter_condition(name_or_id)` - get the conditions which affect what Pokemon might appear in the wild, e.g., day or night.
+- `get_encounter_condition_value(name_or_id)` - get the various states that an encounter condition can have, e.g. time of day can be either day or night.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
