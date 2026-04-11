@@ -10,6 +10,7 @@ onready var characteristic := Characteristic.new()
 onready var contest_effect := ContestEffect.new()
 onready var contest_type := ContestType.new()
 onready var egg_group := EggGroup.new()
+onready var encounter_condition := EncounterCondition.new()
 
 
 func _ready() -> void:
@@ -112,6 +113,17 @@ func get_egg_group(name_or_id) -> Dictionary:
 	return egg_group.get_data()
 
 
+func get_encounter_condition(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-condition/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-condition/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_encounter_condition(<name_or_id>), <name_or_id> must be an int or String type.")
+	return encounter_condition.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -164,6 +176,16 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 						data.get("pokemon_species")
 					)
 					print(JSON.print(egg_group.get_data(), "  "))
+
+				# Encounter condition
+				if "values" in data.keys():
+					encounter_condition.set_data(
+						data.get("id"),
+						data.get("name"),
+						data.get("values"),
+						data.get("names")
+					)
+					print(JSON.print(encounter_condition.get_data(), "  "))
 
 		5:
 			# Berry flavor

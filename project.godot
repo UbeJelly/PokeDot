@@ -49,6 +49,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Resources/EggGroup.gd"
 }, {
+"base": "Node",
+"class": "EncounterCondition",
+"language": "GDScript",
+"path": "res://Resources/EncounterCondition.gd"
+}, {
 "base": "HTTPRequest",
 "class": "PokeDotClient",
 "language": "GDScript",
@@ -68,6 +73,7 @@ _global_script_class_icons={
 "ContestEffect": "",
 "ContestType": "",
 "EggGroup": "",
+"EncounterCondition": "",
 "PokeDotClient": "",
 "PokemonPagination": ""
 }
