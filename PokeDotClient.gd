@@ -9,6 +9,7 @@ onready var berry_firmness := BerryFirmness.new()
 onready var characteristic := Characteristic.new()
 onready var contest_effect := ContestEffect.new()
 onready var contest_type := ContestType.new()
+onready var egg_group := EggGroup.new()
 
 
 func _ready() -> void:
@@ -100,6 +101,17 @@ func get_contest_type(name_or_id) -> Dictionary:
 	return contest_type.get_data()
 
 
+func get_egg_group(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "egg-group/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "egg-group/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_egg_group(<name_or_id>), <name_or_id> must be an int or String type.")
+	return egg_group.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -142,6 +154,16 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 						data.get("names")
 					)
 					print(JSON.print(contest_type.get_data(), "  "))
+
+				# Egg group
+				if "pokemon_species" in data.keys():
+					egg_group.set_data(
+						data.get("id"),
+						data.get("name"),
+						data.get("names"),
+						data.get("pokemon_species")
+					)
+					print(JSON.print(egg_group.get_data(), "  "))
 
 		5:
 			# Berry flavor
