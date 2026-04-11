@@ -26,7 +26,8 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_encounter_condition(name_or_id)` - get the conditions which affect what Pokemon might appear in the wild, e.g., day or night.
 - `get_encounter_condition_value(name_or_id)` - get the various states that an encounter condition can have, e.g., time of day can be either day or night.
 - `get_encounter_method(name_or_id)` - get the methods by which the player might can encounter Pokemon in the wild, e.g., walking in tall grass.
-- `evolution_chain(id)` - get the Pokemon's family tree.
+- `get_evolution_chain(id)` - get the Pokemon's family tree.
+- `get_evolution_trigger(name_or_id)` - get the events and conditions that cause a Pokemon to evolve.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 

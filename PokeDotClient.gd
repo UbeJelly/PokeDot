@@ -14,6 +14,7 @@ onready var encounter_condition := EncounterCondition.new()
 onready var encounter_condition_value := EncounterConditionValue.new()
 onready var encounter_method := EncounterMethod.new()
 onready var evolution_chain := EvolutionChain.new()
+onready var evolution_trigger := EvolutionTrigger.new()
 
 
 func _ready() -> void:
@@ -155,6 +156,17 @@ func get_evolution_chain(id:int = 0) -> Dictionary:
 	return evolution_chain.get_data()
 
 
+func get_evolution_trigger(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "evolution-trigger/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "evolution-trigger/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_evolution_trigger(<name_or_id>), <name_or_id> must be an int or String type.")
+	return evolution_trigger.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -208,16 +220,6 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 					)
 					print(JSON.print(contest_type.get_data(), "  "))
 
-				# Egg group
-				if "pokemon_species" in data.keys():
-					egg_group.set_data(
-						data.get("id"),
-						data.get("name"),
-						data.get("names"),
-						data.get("pokemon_species")
-					)
-					print(JSON.print(egg_group.get_data(), "  "))
-
 				# Encounter condition
 				if "values" in data.keys():
 					encounter_condition.set_data(
@@ -237,7 +239,7 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 						data.get("names")
 					)
 					print(JSON.print(encounter_condition_value.get_data(), "  "))
-				
+
 				# Encounter method
 				if "order" in data.keys():
 					encounter_method.set_data(
@@ -247,6 +249,27 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 						data.get("names")
 					)
 					print(JSON.print(encounter_method.get_data(), "  "))
+
+				if "pokemon_species" in data.keys():
+					# Egg group
+					if "mineral" or "amorphous" or "grass" or "water-3" or "water-2" or "water-1" or "bug" or "dragon" or "flying" or "field" or "human-like" or "fairy" or "monster" in data["pokemon_species"]:
+						egg_group.set_data(
+							data.get("id"),
+							data.get("name"),
+							data.get("names"),
+							data.get("pokemon_species")
+						)
+						print(JSON.print(egg_group.get_data(), "  "))
+
+					# Evolution trigger
+					if "level-up" in data["pokemon_species"]:
+						evolution_trigger.set_data(
+							data.get("id"),
+							data.get("name"),
+							data.get("names"),
+							data.get("pokemon_species")
+						)
+						print(JSON.print(evolution_trigger.get_data(), "  "))
 
 		5:
 			# Berry flavor
