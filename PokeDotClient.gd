@@ -6,6 +6,7 @@ onready var ability := Ability.new()
 onready var berry := Berry.new()
 onready var berry_flavor := BerryFlavor.new()
 onready var berry_firmness := BerryFirmness.new()
+onready var characteristic := Characteristic.new()
 
 
 func _ready() -> void:
@@ -77,6 +78,11 @@ func get_berry_firmness(name_or_id) -> Dictionary:
 	return berry_firmness.get_data()
 
 
+func get_characteristic(id:int = 0) -> Dictionary:
+	PokeDotClient("https://pokeapi.co/api/v2/", "characteristic/%s/" % str(id))
+	return characteristic.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -120,6 +126,17 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 					data.get("names")
 				)
 				print(JSON.print(berry_flavor.get_data(), "  "))
+
+			# Characteristic
+			if "id" and "gene_modulo" and "possible_values" and "highest_stat" and "descriptions" in data.keys():
+				characteristic.set_data(
+					data.get("id"),
+					data.get("gene_modulo"),
+					data.get("possible_values"),
+					data.get("highest_stat"),
+					data.get("descriptions")
+				)
+				print(JSON.print(characteristic.get_data(), "  "))
 
 		9:
 			# Ability

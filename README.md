@@ -19,6 +19,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_berry(name_or_id)` - gets a berry metadata. `name_or_id` can be the `string` name or `int` id of ability.
 - `get_berry_flavor(name_or_id)` - gets a flavor metadata of berry. `name_or_id` can be the `string` name or `int` id of ability.
 - `get_berry_firmness(name_or_id)` - gets the firmness metadata of berry. `name_or_id` can be the `string` name or `int` id of ability.
+- `get_characteristic(id)` - gets Pokemon's highest stat.
 
 To see more info on what they return, please refer to PokeDotClient.gd or [PokéApi](https://pokeapi.co/).
 
