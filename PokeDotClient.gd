@@ -3,6 +3,7 @@ class_name PokeDotClient extends HTTPRequest
 
 onready var pokemon_pagination := PokemonPagination.new()
 onready var ability := Ability.new()
+onready var berry := Berry.new()
 
 
 func _ready() -> void:
@@ -31,13 +32,25 @@ func get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offse
 
 
 func get_ability(name_or_id) -> Dictionary:
-	if name_or_id is String:
-		PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % name_or_id)
-	if name_or_id is int:
-		PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % str(name_or_id))
-	if name_or_id == null or name_or_id == "":
-		printerr("ERROR: get_ability(<name_or_id>), <name_or_id> must be an int or String type.")
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_ability(<name_or_id>), <name_or_id> must be an int or String type.")
 	return ability.get_data()
+
+
+func get_berry(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "berry/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "berry/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_berry(<name_or_id>), <name_or_id> must be an int or String type.")
+	return berry.get_data()
 
 
 func _on_request_completed(result, response_code, headers, body) -> void:
@@ -47,7 +60,7 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 	print("%s\n" % JSON.print(headers, "  "))
 	#print(JSON.print(data, "  "))
 
-	# Check contents if its pagination
+	# Pokemon Pagination
 	if "count" and "next" and "previous" and "results" in data.keys():
 		if not data.get("results").empty() and "name" and "url" in data.get("results")[0]:
 			pokemon_pagination.set_data(
@@ -58,7 +71,7 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 			)
 			print(JSON.print(pokemon_pagination.get_data(), "  "))
 
-	# Check contents if its ability
+	# Ability
 	if "id" and "name" and "is_main_series" and "generation" and "names" and "effect_entries" and "effect_changes" and "flavor_text_entries" and "pokemon" in data.keys():
 		ability.set_data(
 			data.get("id"),
@@ -72,6 +85,24 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 			data.get("pokemon")
 		)
 		print(JSON.print(ability.get_data(), "  "))
+
+	# Berry
+	if "id" and "name" and "growth_time" and "max_harvest" and "natural_gift_power" and "size" and "smoothness" and "soil_dryness" and "firmness" and "flavors" and "item" and "natural_gift_type" in data.keys():
+		berry.set_data(
+			data.get("id"),
+			data.get("name"),
+			data.get("growth_time"),
+			data.get("max_harvest"),
+			data.get("natural_gift_power"),
+			data.get("size"),
+			data.get("smoothness"),
+			data.get("soil_dryness"),
+			data.get("firmness"),
+			data.get("flavors"),
+			data.get("item"),
+			data.get("natural_gift_type")
+		)
+		print(JSON.print(berry.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

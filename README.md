@@ -15,6 +15,9 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
   - `offset` - **"0"** by default, used to move on pages
   - saves and loads data in `Resources/PokemonPagination.gd`, which is then returned by this method
 
+- `get_ability(name_or_id)` - gets an ability metadata. `name_or_id` can be the `string` name or `int` id of ability.
+- `get_berry(name_or_id)` - gets a berry metadata. `name_or_id` can be the `string` name or `int` id of ability.
+
 To see more info refer to [PokéApi](https://pokeapi.co/).
 
 > [!NOTE]  
