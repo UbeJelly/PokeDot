@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://Resources/Berry.gd"
 }, {
 "base": "Node",
+"class": "BerryFirmness",
+"language": "GDScript",
+"path": "res://Resources/BerryFirmness.gd"
+}, {
+"base": "Node",
 "class": "BerryFlavor",
 "language": "GDScript",
 "path": "res://Resources/BerryFlavor.gd"
@@ -37,6 +42,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Ability": "",
 "Berry": "",
+"BerryFirmness": "",
 "BerryFlavor": "",
 "PokeDotClient": "",
 "PokemonPagination": ""

@@ -5,6 +5,7 @@ onready var pokemon_pagination := PokemonPagination.new()
 onready var ability := Ability.new()
 onready var berry := Berry.new()
 onready var berry_flavor := BerryFlavor.new()
+onready var berry_firmness := BerryFirmness.new()
 
 
 func _ready() -> void:
@@ -65,6 +66,17 @@ func get_berry_flavor(name_or_id) -> Dictionary:
 	return berry_flavor.get_data()
 
 
+func get_berry_firmness(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "berry-firmness/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "berry-firmness/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_berry_firmness(<name_or_id>), <name_or_id> must be an int or String type.")
+	return berry_firmness.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -76,7 +88,7 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 	# it can then invalidate values depending on the class being used.
 	match data.size():
 		4:
-			# Pokemon Pagination
+			# Pokemon pagination
 			if "count" and "next" and "previous" and "results" in data.keys():
 				if not data.get("results").empty() and "name" and "url" in data.get("results")[0]:
 					pokemon_pagination.set_data(
@@ -86,6 +98,16 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 						data.get("results")
 					)
 					print(JSON.print(pokemon_pagination.get_data(), "  "))
+
+			# Berry firmness
+			if "id" and "name" and "berries" and "names" in data.keys():
+				berry_firmness.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("berries"),
+					data.get("names")
+				)
+				print(JSON.print(berry_firmness.get_data(), "  "))
 
 		5:
 			# Berry flavor
