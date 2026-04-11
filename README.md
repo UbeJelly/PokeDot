@@ -17,8 +17,9 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 
 - `get_ability(name_or_id)` - gets an ability metadata. `name_or_id` can be the `string` name or `int` id of ability.
 - `get_berry(name_or_id)` - gets a berry metadata. `name_or_id` can be the `string` name or `int` id of ability.
+- `get_berry_flavor(name_or_id)` - gets a berry flavor metadata. `name_or_id` can be the `string` name or `int` id of ability.
 
-To see more info refer to [PokéApi](https://pokeapi.co/).
+To see more info on what they return, please refer to PokeDotClient.gd or [PokéApi](https://pokeapi.co/).
 
 > [!NOTE]  
 > Launch Godot with an external terminal to print all output.
@@ -45,14 +46,7 @@ HTTP response code: RESPONSE_OK
   "next": "https://pokeapi.co/api/v2/pokemon/?offset=21&limit=20",
   "previous": "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1",
   "results": [
-    {
-      "name": "ivysaur",
-      "url": "https://pokeapi.co/api/v2/pokemon/2/"
-    },
-    {
-      "name": "venusaur",
-      "url": "https://pokeapi.co/api/v2/pokemon/3/"
-    },
+    // ...
     {
       "name": "charmander",
       "url": "https://pokeapi.co/api/v2/pokemon/4/"
@@ -64,18 +58,6 @@ HTTP response code: RESPONSE_OK
     {
       "name": "charizard",
       "url": "https://pokeapi.co/api/v2/pokemon/6/"
-    },
-    {
-      "name": "squirtle",
-      "url": "https://pokeapi.co/api/v2/pokemon/7/"
-    },
-    {
-      "name": "wartortle",
-      "url": "https://pokeapi.co/api/v2/pokemon/8/"
-    },
-    {
-      "name": "blastoise",
-      "url": "https://pokeapi.co/api/v2/pokemon/9/"
     },
     // ...
   ]

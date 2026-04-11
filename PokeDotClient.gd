@@ -4,6 +4,7 @@ class_name PokeDotClient extends HTTPRequest
 onready var pokemon_pagination := PokemonPagination.new()
 onready var ability := Ability.new()
 onready var berry := Berry.new()
+onready var berry_flavor := BerryFlavor.new()
 
 
 func _ready() -> void:
@@ -15,7 +16,7 @@ func PokeDotClient(BASE_URL: String = "https://pokeapi.co/api/v2/", endpoint: St
 	print("API URL: %s" % BASE_URL + endpoint)
 
 	if not BASE_URL == "" or not endpoint == "":
-		var request_status: int = request(
+		var _request_status: int = request(
 			BASE_URL + endpoint, PoolStringArray(
 				["text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"]
 			), true, HTTPClient.METHOD_GET)
@@ -53,6 +54,17 @@ func get_berry(name_or_id) -> Dictionary:
 	return berry.get_data()
 
 
+func get_berry_flavor(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "berry-flavor/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "berry-flavor/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_berry_flavor(<name_or_id>), <name_or_id> must be an int or String type.")
+	return berry_flavor.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -60,49 +72,67 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 	print("%s\n" % JSON.print(headers, "  "))
 	#print(JSON.print(data, "  "))
 
-	# Pokemon Pagination
-	if "count" and "next" and "previous" and "results" in data.keys():
-		if not data.get("results").empty() and "name" and "url" in data.get("results")[0]:
-			pokemon_pagination.set_data(
-				data.get("count"),
-				data.get("next"),
-				data.get("previous"),
-				data.get("results")
-			)
-			print(JSON.print(pokemon_pagination.get_data(), "  "))
+	# Check data size first so nothing would duplicate keys, which if not checked
+	# it can then invalidate values depending on the class being used.
+	match data.size():
+		4:
+			# Pokemon Pagination
+			if "count" and "next" and "previous" and "results" in data.keys():
+				if not data.get("results").empty() and "name" and "url" in data.get("results")[0]:
+					pokemon_pagination.set_data(
+						data.get("count"),
+						data.get("next"),
+						data.get("previous"),
+						data.get("results")
+					)
+					print(JSON.print(pokemon_pagination.get_data(), "  "))
 
-	# Ability
-	if "id" and "name" and "is_main_series" and "generation" and "names" and "effect_entries" and "effect_changes" and "flavor_text_entries" and "pokemon" in data.keys():
-		ability.set_data(
-			data.get("id"),
-			data.get("name"),
-			data.get("is_main_series"),
-			data.get("generation"),
-			data.get("names"),
-			data.get("effect_entries"),
-			data.get("effect_changes"),
-			data.get("flavor_text_entries"),
-			data.get("pokemon")
-		)
-		print(JSON.print(ability.get_data(), "  "))
+		5:
+			# Berry flavor
+			if "id" and "name" and "berries" and "contest_type" and "names" in data.keys():
+				berry_flavor.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("berries"),
+					data.get("contest_type"),
+					data.get("names")
+				)
+				print(JSON.print(berry_flavor.get_data(), "  "))
 
-	# Berry
-	if "id" and "name" and "growth_time" and "max_harvest" and "natural_gift_power" and "size" and "smoothness" and "soil_dryness" and "firmness" and "flavors" and "item" and "natural_gift_type" in data.keys():
-		berry.set_data(
-			data.get("id"),
-			data.get("name"),
-			data.get("growth_time"),
-			data.get("max_harvest"),
-			data.get("natural_gift_power"),
-			data.get("size"),
-			data.get("smoothness"),
-			data.get("soil_dryness"),
-			data.get("firmness"),
-			data.get("flavors"),
-			data.get("item"),
-			data.get("natural_gift_type")
-		)
-		print(JSON.print(berry.get_data(), "  "))
+		9:
+			# Ability
+			if "id" and "name" and "is_main_series" and "generation" and "names" and "effect_entries" and "effect_changes" and "flavor_text_entries" and "pokemon" in data.keys():
+				ability.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("is_main_series"),
+					data.get("generation"),
+					data.get("names"),
+					data.get("effect_entries"),
+					data.get("effect_changes"),
+					data.get("flavor_text_entries"),
+					data.get("pokemon")
+				)
+				print(JSON.print(ability.get_data(), "  "))
+
+		12:
+			# Berry
+			if "id" and "name" and "growth_time" and "max_harvest" and "natural_gift_power" and "size" and "smoothness" and "soil_dryness" and "firmness" and "flavors" and "item" and "natural_gift_type" in data.keys():
+				berry.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("growth_time"),
+					data.get("max_harvest"),
+					data.get("natural_gift_power"),
+					data.get("size"),
+					data.get("smoothness"),
+					data.get("soil_dryness"),
+					data.get("firmness"),
+					data.get("flavors"),
+					data.get("item"),
+					data.get("natural_gift_type")
+				)
+				print(JSON.print(berry.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
