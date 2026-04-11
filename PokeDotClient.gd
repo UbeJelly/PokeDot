@@ -8,6 +8,7 @@ onready var berry_flavor := BerryFlavor.new()
 onready var berry_firmness := BerryFirmness.new()
 onready var characteristic := Characteristic.new()
 onready var contest_effect := ContestEffect.new()
+onready var contest_type := ContestType.new()
 
 
 func _ready() -> void:
@@ -88,6 +89,16 @@ func get_contest_effect(id:int = 0) -> Dictionary:
 	PokeDotClient("https://pokeapi.co/api/v2/", "contest-effect/%s/" % str(id))
 	return contest_effect.get_data()
 
+func get_contest_type(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "contest-type/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "contest-type/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_contest_type(<name_or_id>), <name_or_id> must be an int or String type.")
+	return contest_type.get_data()
+
 
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
@@ -111,15 +122,26 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 					)
 					print(JSON.print(pokemon_pagination.get_data(), "  "))
 
-			# Berry firmness
-			if "id" and "name" and "berries" and "names" in data.keys():
-				berry_firmness.set_data(
-					data.get("id"),
-					data.get("name"),
-					data.get("berries"),
-					data.get("names")
-				)
-				print(JSON.print(berry_firmness.get_data(), "  "))
+			if "id" and "name" and "names" in data.keys():
+				# Berry firmness
+				if "berries" in data.keys():
+					berry_firmness.set_data(
+						data.get("id"),
+						data.get("name"),
+						data.get("berries"),
+						data.get("names")
+					)
+					print(JSON.print(berry_firmness.get_data(), "  "))
+
+				# Contest type
+				if "berry_flavor" in data.keys():
+					contest_type.set_data(
+						data.get("id"),
+						data.get("name"),
+						data.get("berry_flavor"),
+						data.get("names")
+					)
+					print(JSON.print(contest_type.get_data(), "  "))
 
 		5:
 			# Berry flavor

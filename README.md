@@ -21,6 +21,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_berry_firmness(name_or_id)` - gets the firmness metadata of berry. `name_or_id` can be the `string` name or `int` id of ability.
 - `get_characteristic(id)` - gets Pokemon's highest stat.
 - `get_contest_effect(id)` - gets the Pokemon moves' effects in contests.
+- `get_contest_type(name_or_id)` - categories judges used to weigh a Pokemon's condition in contests.
 
 To see more info on what they return, please refer to PokeDotClient.gd or [PokéApi](https://pokeapi.co/).
 
