@@ -13,6 +13,7 @@ onready var egg_group := EggGroup.new()
 onready var encounter_condition := EncounterCondition.new()
 onready var encounter_condition_value := EncounterConditionValue.new()
 onready var encounter_method := EncounterMethod.new()
+onready var evolution_chain := EvolutionChain.new()
 
 
 func _ready() -> void:
@@ -149,6 +150,11 @@ func get_encounter_method(name_or_id) -> Dictionary:
 	return encounter_method.get_data()
 
 
+func get_evolution_chain(id:int = 0) -> Dictionary:
+	PokeDotClient("https://pokeapi.co/api/v2/", "evolution-chain/%s/" % str(id))
+	return evolution_chain.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -159,6 +165,16 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 	# Check data size first so nothing would duplicate keys, which if not checked
 	# it can then invalidate values depending on the class being used.
 	match data.size():
+		3:
+			# Evolution chain
+			if "id" and "baby_trigger_item" and "chain" in data.keys():
+				evolution_chain.set_data(
+					data.get("id"),
+					data.get("baby_trigger_item"),
+					data.get("chain")
+				)
+				print(JSON.print(evolution_chain.get_data(), "  "))
+
 		4:
 			# Pokemon pagination
 			if "count" and "next" and "previous" and "results" in data.keys():
