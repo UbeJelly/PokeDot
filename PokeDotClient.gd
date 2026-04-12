@@ -17,6 +17,7 @@ onready var evolution_chain := EvolutionChain.new()
 onready var evolution_trigger := EvolutionTrigger.new()
 onready var gender := Gender.new()
 onready var generation := Generation.new()
+onready var growth_rate := GrowthRate.new()
 
 
 func _ready() -> void:
@@ -191,6 +192,17 @@ func get_generation(name_or_id) -> Dictionary:
 	return generation.get_data()
 
 
+func get_growth_rate(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "growth-rate/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "growth-rate/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_growth_rate(<name_or_id>), <name_or_id> must be an int or String type.")
+	return growth_rate.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -337,6 +349,19 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 					data.get("flavor_text_entries")
 				)
 				print(JSON.print(contest_effect.get_data(), "  "))
+
+		6:
+			# Growth rate
+			if "id" and "name" and "formula" and "descriptions" and "levels" and "pokemon_species" in data.keys():
+				growth_rate.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("formula"),
+					data.get("descriptions"),
+					data.get("levels"),
+					data.get("pokemon_species")
+				)
+				print(JSON.print(growth_rate.get_data(), "  "))
 
 		9:
 			# Ability
