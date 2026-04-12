@@ -16,6 +16,7 @@ onready var encounter_method := EncounterMethod.new()
 onready var evolution_chain := EvolutionChain.new()
 onready var evolution_trigger := EvolutionTrigger.new()
 onready var gender := Gender.new()
+onready var generation := Generation.new()
 
 
 func _ready() -> void:
@@ -177,6 +178,17 @@ func get_gender(name_or_id) -> Dictionary:
 		_:
 			printerr("ERROR: get_gender(<name_or_id>), <name_or_id> must be an int or String type.")
 	return gender.get_data()
+
+
+func get_generation(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "generation/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "generation/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_generation(<name_or_id>), <name_or_id> must be an int or String type.")
+	return generation.get_data()
 
 
 func _on_request_completed(result, response_code, headers, body) -> void:
@@ -341,6 +353,22 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 					data.get("pokemon")
 				)
 				print(JSON.print(ability.get_data(), "  "))
+
+
+			# Generation
+			if "id" and "name" and "abilities" and "main_region" and "moves" and "names" and "pokemon_species" and "types" and "version_groups" in data.keys():
+				generation.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("abilities"),
+					data.get("main_region"),
+					data.get("moves"),
+					data.get("names"),
+					data.get("pokemon_species"),
+					data.get("types"),
+					data.get("version_groups")
+				)
+				print(JSON.print(generation.get_data(), "  "))
 
 		12:
 			# Berry
