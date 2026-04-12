@@ -32,6 +32,8 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_generation(name_or_id)` - get details about a grouping of the Pokemon games that are separated based on the Pokemon they include.
 - `get_growth_rate(name_or_id)` - get the speed in which a Pokemon gain levels through experience.
 - `get_item(name_or_id)` - get an object in the games which the player can pick up, keep in their bag, and use in some manner.
+- `get_item_attribute(name_or_id)` - get the definition of particular aspects of items, e.g. "usable in battle" or "consumable".
+- `get_item_category(name_or_id)` - get which categories determine where items will be placed in the players bag.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 

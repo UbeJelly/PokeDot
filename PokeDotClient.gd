@@ -1,5 +1,27 @@
 class_name PokeDotClient extends HTTPRequest
 
+enum Get {
+	POKEMON_PAGINATION,
+	ABILITY,
+	BERRY,
+	BERRY_FLAVOR,
+	BERRY_FIRMNESS,
+	CHARACTERISTIC,
+	CONTEST_EFFECT,
+	CONTEST_TYPE,
+	EGG_GROUP,
+	ENCOUNTER_CONDITION,
+	ENCOUNTER_CONDITION_VALUE,
+	ENCOUNTER_METHOD,
+	EVOLUTION_CHAIN,
+	EVOLUTION_TRIGGER,
+	GENDER,
+	GENERATION,
+	GROWTH_RATE,
+	ITEM,
+	ITEM_ATTRIBUTE,
+	ITEM_CATEGORY
+}
 
 onready var pokemon_pagination := PokemonPagination.new()
 onready var ability := Ability.new()
@@ -19,6 +41,10 @@ onready var gender := Gender.new()
 onready var generation := Generation.new()
 onready var growth_rate := GrowthRate.new()
 onready var item := Item.new()
+onready var item_attribute := ItemAttribute.new()
+onready var item_category := ItemCategory.new()
+
+var query: int = 0
 
 
 func _ready() -> void:
@@ -42,11 +68,13 @@ func PokeDotClient(BASE_URL: String = "https://pokeapi.co/api/v2/", endpoint: St
 
 
 func get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offset: int = 0) -> Dictionary:
+	query = Get.POKEMON_PAGINATION
 	PokeDotClient("https://pokeapi.co/api/v2/", "%s/?limit=%s&offset=%s" % [endpoint, limit, offset])
 	return pokemon_pagination.get_data()
 
 
 func get_ability(name_or_id) -> Dictionary:
+	query = Get.ABILITY
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % name_or_id)
@@ -58,6 +86,7 @@ func get_ability(name_or_id) -> Dictionary:
 
 
 func get_berry(name_or_id) -> Dictionary:
+	query = Get.BERRY
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "berry/%s/" % name_or_id)
@@ -69,6 +98,7 @@ func get_berry(name_or_id) -> Dictionary:
 
 
 func get_berry_flavor(name_or_id) -> Dictionary:
+	query = Get.BERRY_FLAVOR
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "berry-flavor/%s/" % name_or_id)
@@ -80,6 +110,7 @@ func get_berry_flavor(name_or_id) -> Dictionary:
 
 
 func get_berry_firmness(name_or_id) -> Dictionary:
+	query = Get.BERRY_FIRMNESS
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "berry-firmness/%s/" % name_or_id)
@@ -91,16 +122,19 @@ func get_berry_firmness(name_or_id) -> Dictionary:
 
 
 func get_characteristic(id:int = 0) -> Dictionary:
+	query = Get.CHARACTERISTIC
 	PokeDotClient("https://pokeapi.co/api/v2/", "characteristic/%s/" % str(id))
 	return characteristic.get_data()
 
 
 func get_contest_effect(id:int = 0) -> Dictionary:
+	query = Get.CONTEST_EFFECT
 	PokeDotClient("https://pokeapi.co/api/v2/", "contest-effect/%s/" % str(id))
 	return contest_effect.get_data()
 
 
 func get_contest_type(name_or_id) -> Dictionary:
+	query = Get.CONTEST_TYPE
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "contest-type/%s/" % name_or_id)
@@ -112,6 +146,7 @@ func get_contest_type(name_or_id) -> Dictionary:
 
 
 func get_egg_group(name_or_id) -> Dictionary:
+	query = Get.EGG_GROUP
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "egg-group/%s/" % name_or_id)
@@ -123,6 +158,7 @@ func get_egg_group(name_or_id) -> Dictionary:
 
 
 func get_encounter_condition(name_or_id) -> Dictionary:
+	query = Get.ENCOUNTER_CONDITION
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-condition/%s/" % name_or_id)
@@ -134,6 +170,7 @@ func get_encounter_condition(name_or_id) -> Dictionary:
 
 
 func get_encounter_condition_value(name_or_id) -> Dictionary:
+	query = Get.ENCOUNTER_CONDITION_VALUE
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-condition-value/%s/" % name_or_id)
@@ -145,6 +182,7 @@ func get_encounter_condition_value(name_or_id) -> Dictionary:
 
 
 func get_encounter_method(name_or_id) -> Dictionary:
+	query = Get.ENCOUNTER_METHOD
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-method/%s/" % name_or_id)
@@ -156,11 +194,13 @@ func get_encounter_method(name_or_id) -> Dictionary:
 
 
 func get_evolution_chain(id:int = 0) -> Dictionary:
+	query = Get.EVOLUTION_CHAIN
 	PokeDotClient("https://pokeapi.co/api/v2/", "evolution-chain/%s/" % str(id))
 	return evolution_chain.get_data()
 
 
 func get_evolution_trigger(name_or_id) -> Dictionary:
+	query = Get.EVOLUTION_TRIGGER
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "evolution-trigger/%s/" % name_or_id)
@@ -172,6 +212,7 @@ func get_evolution_trigger(name_or_id) -> Dictionary:
 
 
 func get_gender(name_or_id) -> Dictionary:
+	query = Get.GENDER
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "gender/%s/" % name_or_id)
@@ -183,6 +224,7 @@ func get_gender(name_or_id) -> Dictionary:
 
 
 func get_generation(name_or_id) -> Dictionary:
+	query = Get.GENERATION
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "generation/%s/" % name_or_id)
@@ -194,6 +236,7 @@ func get_generation(name_or_id) -> Dictionary:
 
 
 func get_growth_rate(name_or_id) -> Dictionary:
+	query = Get.GROWTH_RATE
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "growth-rate/%s/" % name_or_id)
@@ -205,6 +248,7 @@ func get_growth_rate(name_or_id) -> Dictionary:
 
 
 func get_item(name_or_id) -> Dictionary:
+	query = Get.ITEM
 	match typeof(name_or_id):
 		TYPE_STRING:
 			PokeDotClient("https://pokeapi.co/api/v2/", "item/%s/" % name_or_id)
@@ -215,237 +259,246 @@ func get_item(name_or_id) -> Dictionary:
 	return item.get_data()
 
 
+func get_item_attribute(name_or_id) -> Dictionary:
+	query = Get.ITEM_ATTRIBUTE
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "item-attribute/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "item-attribute/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_item_attribute(<name_or_id>), <name_or_id> must be an int or String type.")
+	return item_attribute.get_data()
+
+
+func get_item_category(name_or_id) -> Dictionary:
+	query = Get.ITEM_CATEGORY
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "item-category/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "item-category/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_item_category(<name_or_id>), <name_or_id> must be an int or String type.")
+	return item_category.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
 	print("HTTP response code: %s\n" % _get_response(response_code))
 	print("%s\n" % JSON.print(headers, "  "))
-	print(JSON.print(data, "  "))
+	#print(JSON.print(data, "  "))
 
-	# Check data size first so nothing would duplicate keys, which if not checked
-	# it can then invalidate values depending on the class being used.
-	match data.size():
-		3:
-			# Evolution chain
-			if "id" and "baby_trigger_item" and "chain" in data.keys():
-				evolution_chain.set_data(
-					data.get("id"),
-					data.get("baby_trigger_item"),
-					data.get("chain")
-				)
-				print(JSON.print(evolution_chain.get_data(), "  "))
+	match query:
+		Get.POKEMON_PAGINATION:
+			pokemon_pagination.set_data(
+				data.get("count"),
+				data.get("next"),
+				data.get("previous"),
+				data.get("results")
+			)
+			print(JSON.print(pokemon_pagination.get_data(), "  "))
 
-		4:
-			# Pokemon pagination
-			if "count" and "next" and "previous" and "results" in data.keys():
-				if not data.get("results").empty() and "name" and "url" in data.get("results")[0]:
-					pokemon_pagination.set_data(
-						data.get("count"),
-						data.get("next"),
-						data.get("previous"),
-						data.get("results")
-					)
-					print(JSON.print(pokemon_pagination.get_data(), "  "))
+		Get.ABILITY:
+			ability.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("is_main_series"),
+				data.get("generation"),
+				data.get("names"),
+				data.get("effect_entries"),
+				data.get("effect_changes"),
+				data.get("flavor_text_entries"),
+				data.get("pokemon")
+			)
+			print(JSON.print(ability.get_data(), "  "))
 
-			if "id" and "name" and "pokemon_species_details" and "required_for_evolution" in data.keys():
-				gender.set_data(
-					data.get("id"),
-					data.get("name"),
-					data.get("pokemon_species_details"),
-					data.get("required_for_evolution")
-				)
-				print(JSON.print(gender.get_data(), "  "))
+		Get.BERRY:
+			berry.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("growth_time"),
+				data.get("max_harvest"),
+				data.get("natural_gift_power"),
+				data.get("size"),
+				data.get("smoothness"),
+				data.get("soil_dryness"),
+				data.get("firmness"),
+				data.get("flavors"),
+				data.get("item"),
+				data.get("natural_gift_type")
+			)
+			print(JSON.print(berry.get_data(), "  "))
 
-			if "id" and "name" and "names" in data.keys():
-				# Berry firmness
-				if "berries" in data.keys():
-					berry_firmness.set_data(
-						data.get("id"),
-						data.get("name"),
-						data.get("berries"),
-						data.get("names")
-					)
-					print(JSON.print(berry_firmness.get_data(), "  "))
+		Get.BERRY_FLAVOR:
+			berry_flavor.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("berries"),
+				data.get("contest_type"),
+				data.get("names")
+			)
+			print(JSON.print(berry_flavor.get_data(), "  "))
 
-				# Contest type
-				if "berry_flavor" in data.keys():
-					contest_type.set_data(
-						data.get("id"),
-						data.get("name"),
-						data.get("berry_flavor"),
-						data.get("names")
-					)
-					print(JSON.print(contest_type.get_data(), "  "))
+		Get.BERRY_FIRMNESS:
+			berry_firmness.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("berries"),
+				data.get("names")
+			)
+			print(JSON.print(berry_firmness.get_data(), "  "))
 
-				# Encounter condition
-				if "values" in data.keys():
-					encounter_condition.set_data(
-						data.get("id"),
-						data.get("name"),
-						data.get("values"),
-						data.get("names")
-					)
-					print(JSON.print(encounter_condition.get_data(), "  "))
+		Get.CHARACTERISTIC:
+			characteristic.set_data(
+				data.get("id"),
+				data.get("gene_modulo"),
+				data.get("possible_values"),
+				data.get("highest_stat"),
+				data.get("descriptions")
+			)
+			print(JSON.print(characteristic.get_data(), "  "))
 
-				# Encounter condition value
-				if "condition" in data.keys():
-					encounter_condition_value.set_data(
-						data.get("id"),
-						data.get("name"),
-						data.get("condition"),
-						data.get("names")
-					)
-					print(JSON.print(encounter_condition_value.get_data(), "  "))
+		Get.CONTEST_EFFECT:
+			contest_effect.set_data(
+				data.get("id"),
+				data.get("appeal"),
+				data.get("jam"),
+				data.get("effect_entries"),
+				data.get("flavor_text_entries")
+			)
+			print(JSON.print(contest_effect.get_data(), "  "))
 
-				# Encounter method
-				if "order" in data.keys():
-					encounter_method.set_data(
-						data.get("id"),
-						data.get("name"),
-						data.get("order"),
-						data.get("names")
-					)
-					print(JSON.print(encounter_method.get_data(), "  "))
+		Get.CONTEST_TYPE:
+			contest_type.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("berry_flavor"),
+				data.get("names")
+			)
+			print(JSON.print(contest_type.get_data(), "  "))
 
-				if "pokemon_species" in data.keys():
-					# Egg group
-					if "mineral" or "amorphous" or "grass" or "water-3" or "water-2" or "water-1" or "bug" or "dragon" or "flying" or "field" or "human-like" or "fairy" or "monster" in data["pokemon_species"]:
-						egg_group.set_data(
-							data.get("id"),
-							data.get("name"),
-							data.get("names"),
-							data.get("pokemon_species")
-						)
-						print(JSON.print(egg_group.get_data(), "  "))
+		Get.EGG_GROUP:
+			egg_group.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("names"),
+				data.get("pokemon_species")
+			)
+			print(JSON.print(egg_group.get_data(), "  "))
 
-					# Evolution trigger
-					if "level-up" in data["pokemon_species"]:
-						evolution_trigger.set_data(
-							data.get("id"),
-							data.get("name"),
-							data.get("names"),
-							data.get("pokemon_species")
-						)
-						print(JSON.print(evolution_trigger.get_data(), "  "))
+		Get.ENCOUNTER_CONDITION:
+			encounter_condition.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("values"),
+				data.get("names")
+			)
+			print(JSON.print(encounter_condition.get_data(), "  "))
 
-		5:
-			# Berry flavor
-			if "id" and "name" and "berries" and "contest_type" and "names" in data.keys():
-				berry_flavor.set_data(
-					data.get("id"),
-					data.get("name"),
-					data.get("berries"),
-					data.get("contest_type"),
-					data.get("names")
-				)
-				print(JSON.print(berry_flavor.get_data(), "  "))
+		Get.ENCOUNTER_CONDITION_VALUE:
+			encounter_condition_value.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("condition"),
+				data.get("names")
+			)
+			print(JSON.print(encounter_condition_value.get_data(), "  "))
 
-			# Characteristic
-			if "id" and "gene_modulo" and "possible_values" and "highest_stat" and "descriptions" in data.keys():
-				characteristic.set_data(
-					data.get("id"),
-					data.get("gene_modulo"),
-					data.get("possible_values"),
-					data.get("highest_stat"),
-					data.get("descriptions")
-				)
-				print(JSON.print(characteristic.get_data(), "  "))
+		Get.ENCOUNTER_METHOD:
+			encounter_method.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("order"),
+				data.get("names")
+			)
+			print(JSON.print(encounter_method.get_data(), "  "))
 
-			# Contest effect
-			if "id" and "appeal" and "jam" and "effect_entries" and "flavor_text_entries" in data.keys():
-				contest_effect.set_data(
-					data.get("id"),
-					data.get("appeal"),
-					data.get("jam"),
-					data.get("effect_entries"),
-					data.get("flavor_text_entries")
-				)
-				print(JSON.print(contest_effect.get_data(), "  "))
+		Get.EVOLUTION_CHAIN:
+			evolution_chain.set_data(
+				data.get("id"),
+				data.get("baby_trigger_item"),
+				data.get("chain")
+			)
+			print(JSON.print(evolution_chain.get_data(), "  "))
 
-		6:
-			# Growth rate
-			if "id" and "name" and "formula" and "descriptions" and "levels" and "pokemon_species" in data.keys():
-				growth_rate.set_data(
-					data.get("id"),
-					data.get("name"),
-					data.get("formula"),
-					data.get("descriptions"),
-					data.get("levels"),
-					data.get("pokemon_species")
-				)
-				print(JSON.print(growth_rate.get_data(), "  "))
+		Get.EVOLUTION_TRIGGER:
+			evolution_trigger.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("names"),
+				data.get("pokemon_species")
+			)
+			print(JSON.print(evolution_trigger.get_data(), "  "))
 
-		9:
-			# Ability
-			if "id" and "name" and "is_main_series" and "generation" and "names" and "effect_entries" and "effect_changes" and "flavor_text_entries" and "pokemon" in data.keys():
-				ability.set_data(
-					data.get("id"),
-					data.get("name"),
-					data.get("is_main_series"),
-					data.get("generation"),
-					data.get("names"),
-					data.get("effect_entries"),
-					data.get("effect_changes"),
-					data.get("flavor_text_entries"),
-					data.get("pokemon")
-				)
-				print(JSON.print(ability.get_data(), "  "))
+		Get.GENDER:
+			gender.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("pokemon_species_details"),
+				data.get("required_for_evolution")
+			)
+			print(JSON.print(gender.get_data(), "  "))
 
+		Get.GENERATION:
+			generation.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("abilities"),
+				data.get("main_region"),
+				data.get("moves"),
+				data.get("names"),
+				data.get("pokemon_species"),
+				data.get("types"),
+				data.get("version_groups")
+			)
+			print(JSON.print(generation.get_data(), "  "))
 
-			# Generation
-			if "id" and "name" and "abilities" and "main_region" and "moves" and "names" and "pokemon_species" and "types" and "version_groups" in data.keys():
-				generation.set_data(
-					data.get("id"),
-					data.get("name"),
-					data.get("abilities"),
-					data.get("main_region"),
-					data.get("moves"),
-					data.get("names"),
-					data.get("pokemon_species"),
-					data.get("types"),
-					data.get("version_groups")
-				)
-				print(JSON.print(generation.get_data(), "  "))
+		Get.GROWTH_RATE:
+			growth_rate.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("formula"),
+				data.get("descriptions"),
+				data.get("levels"),
+				data.get("pokemon_species")
+			)
+			print(JSON.print(growth_rate.get_data(), "  "))
 
-		12:
-			# Berry
-			if "id" and "name" and "growth_time" and "max_harvest" and "natural_gift_power" and "size" and "smoothness" and "soil_dryness" and "firmness" and "flavors" and "item" and "natural_gift_type" in data.keys():
-				berry.set_data(
-					data.get("id"),
-					data.get("name"),
-					data.get("growth_time"),
-					data.get("max_harvest"),
-					data.get("natural_gift_power"),
-					data.get("size"),
-					data.get("smoothness"),
-					data.get("soil_dryness"),
-					data.get("firmness"),
-					data.get("flavors"),
-					data.get("item"),
-					data.get("natural_gift_type")
-				)
-				print(JSON.print(berry.get_data(), "  "))
+		Get.ITEM:
+			item.set_data(
+				data.get("attributes"),
+				data.get("category"),
+				data.get("effect_entries"),
+				data.get("flavor_text_entries"),
+				data.get("game_indices"),
+				data.get("names"),
+				data.get("sprites"),
+				data.get("held_by_pokemon"),
+				data.get("baby_trigger_for")
+			)
+			print(JSON.print(item.get_data(), "  "))
 
-		14:
-			# Item
-			if "id" and "name" and "cost" and "fling_power" and "fling_effect" and "attributes" and "category" and "effect_entries" and "flavor_text_entries" and "game_indices"  and "names" and "sprites" and "held_by_pokemon" and "baby_trigger_for" in data.keys():
-				item.set_data(
-					data.get("id"),
-					data.get("name"),
-					data.get("cost"),
-					data.get("fling_power"),
-					data.get("fling_effect"),
-					data.get("attributes"),
-					data.get("category"),
-					data.get("effect_entries"),
-					data.get("flavor_text_entries"),
-					data.get("game_indices"),
-					data.get("names"),
-					data.get("sprites"),
-					data.get("held_by_pokemon"),
-					data.get("baby_trigger_for")
-				)
-				print(JSON.print(item.get_data(), "  "))
+		Get.ITEM_ATTRIBUTE:
+			item_attribute.set_data(
+				data.get("descriptions"),
+				data.get("id"),
+				data.get("items"),
+				data.get("name"),
+				data.get("names")
+			)
+			print(JSON.print(item_attribute.get_data(), "  "))
+
+		Get.ITEM_CATEGORY:
+			item_category.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("items"),
+				data.get("names"),
+				data.get("pocket")
+			)
+			print(JSON.print(item_category.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

@@ -2,14 +2,6 @@ class_name Item extends Node
 
 
 export var data: Dictionary = {
-	"id": 0,
-	"name": "",
-	"cost": 0,
-	"fling_power": 0,
-	"fling_effect": {
-		"name": "",
-		"url": ""
-	},
 	"attributes": [
 		{
 			"name": "",
@@ -87,13 +79,8 @@ export var data: Dictionary = {
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _cost: int = 0, _fling_power: int = 0, _fling_effect: Dictionary = {}, _attributes: Array = [], _category: Dictionary = {}, _effect_entries: Array = [], _flavor_text_entries: Array = [], _game_indices: Array = [], _names: Array = [], _sprites: Dictionary = {}, _held_by_pokemon: Array = [], _baby_trigger_for: Dictionary = {}) -> void:
+func set_data(_attributes: Array = [], _category: Dictionary = {}, _effect_entries: Array = [], _flavor_text_entries: Array = [], _game_indices: Array = [], _names: Array = [], _sprites: Dictionary = {}, _held_by_pokemon: Array = [], _baby_trigger_for: Dictionary = {}) -> void:
 	data = {
-		"id": _id,
-		"name": _name,
-		"cost": _cost,
-		"fling_power": _fling_power,
-		"fling_effect": _fling_effect,
 		"attributes": _attributes,
 		"category": _category,
 		"effect_entries": _effect_entries,
