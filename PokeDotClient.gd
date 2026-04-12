@@ -18,6 +18,7 @@ onready var evolution_trigger := EvolutionTrigger.new()
 onready var gender := Gender.new()
 onready var generation := Generation.new()
 onready var growth_rate := GrowthRate.new()
+onready var item := Item.new()
 
 
 func _ready() -> void:
@@ -203,12 +204,23 @@ func get_growth_rate(name_or_id) -> Dictionary:
 	return growth_rate.get_data()
 
 
+func get_item(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "item/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "item/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_item(<name_or_id>), <name_or_id> must be an int or String type.")
+	return item.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
 	print("HTTP response code: %s\n" % _get_response(response_code))
 	print("%s\n" % JSON.print(headers, "  "))
-	#print(JSON.print(data, "  "))
+	print(JSON.print(data, "  "))
 
 	# Check data size first so nothing would duplicate keys, which if not checked
 	# it can then invalidate values depending on the class being used.
@@ -413,6 +425,27 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 					data.get("natural_gift_type")
 				)
 				print(JSON.print(berry.get_data(), "  "))
+
+		14:
+			# Item
+			if "id" and "name" and "cost" and "fling_power" and "fling_effect" and "attributes" and "category" and "effect_entries" and "flavor_text_entries" and "game_indices"  and "names" and "sprites" and "held_by_pokemon" and "baby_trigger_for" in data.keys():
+				item.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("cost"),
+					data.get("fling_power"),
+					data.get("fling_effect"),
+					data.get("attributes"),
+					data.get("category"),
+					data.get("effect_entries"),
+					data.get("flavor_text_entries"),
+					data.get("game_indices"),
+					data.get("names"),
+					data.get("sprites"),
+					data.get("held_by_pokemon"),
+					data.get("baby_trigger_for")
+				)
+				print(JSON.print(item.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

@@ -31,6 +31,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_gender(name_or_id)` - get details about gender i.e. species, rate, and evolution requirements.
 - `get_generation(name_or_id)` - get details about a grouping of the Pokemon games that are separated based on the Pokemon they include.
 - `get_growth_rate(name_or_id)` - get the speed in which a Pokemon gain levels through experience.
+- `get_item(name_or_id)` - get an object in the games which the player can pick up, keep in their bag, and use in some manner.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
