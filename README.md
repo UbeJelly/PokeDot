@@ -34,6 +34,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_item(name_or_id)` - get an object in the games which the player can pick up, keep in their bag, and use in some manner.
 - `get_item_attribute(name_or_id)` - get the definition of particular aspects of items, e.g. "usable in battle" or "consumable".
 - `get_item_category(name_or_id)` - get which categories determine where items will be placed in the players bag.
+- `get_item_fling_effect(name_or_id)` - get the various effects of the move "Fling" when used with different items.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
