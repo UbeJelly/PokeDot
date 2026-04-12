@@ -15,6 +15,7 @@ onready var encounter_condition_value := EncounterConditionValue.new()
 onready var encounter_method := EncounterMethod.new()
 onready var evolution_chain := EvolutionChain.new()
 onready var evolution_trigger := EvolutionTrigger.new()
+onready var gender := Gender.new()
 
 
 func _ready() -> void:
@@ -167,6 +168,17 @@ func get_evolution_trigger(name_or_id) -> Dictionary:
 	return evolution_trigger.get_data()
 
 
+func get_gender(name_or_id) -> Dictionary:
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "gender/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "gender/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_gender(<name_or_id>), <name_or_id> must be an int or String type.")
+	return gender.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -198,6 +210,15 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 						data.get("results")
 					)
 					print(JSON.print(pokemon_pagination.get_data(), "  "))
+
+			if "id" and "name" and "pokemon_species_details" and "required_for_evolution" in data.keys():
+				gender.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("pokemon_species_details"),
+					data.get("required_for_evolution")
+				)
+				print(JSON.print(gender.get_data(), "  "))
 
 			if "id" and "name" and "names" in data.keys():
 				# Berry firmness

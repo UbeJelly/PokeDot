@@ -28,6 +28,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_encounter_method(name_or_id)` - get the methods by which the player might can encounter Pokemon in the wild, e.g., walking in tall grass.
 - `get_evolution_chain(id)` - get the Pokemon's family tree.
 - `get_evolution_trigger(name_or_id)` - get the events and conditions that cause a Pokemon to evolve.
+- `get_gender(name_or_id)` - get details about gender i.e. species, rate, and evolution requirements.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
