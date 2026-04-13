@@ -38,6 +38,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_item_pocket(name_or_id)` - get the bag pocket used for storing items by category.
 - `get_language(name_or_id)` - get the languages for translations of API resource information.
 - `get_location(name_or_id)` - get the locations that can be visited within the games. They make up sizable portions of regions, like cities or routes.
+- `get_location_area(name_or_id)` - get the sections of areas, such as floors in a building or cave. Each area has its own set of possible Pokémon encounters.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 

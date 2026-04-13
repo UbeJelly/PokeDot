@@ -24,7 +24,8 @@ enum Get {
 	ITEM_FLING_EFFECT,
 	ITEM_POCKET,
 	LANGUAGE,
-	LOCATION
+	LOCATION,
+	LOCATION_AREA
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -51,6 +52,7 @@ onready var item_fling_effect := ItemFlingEffect.new()
 onready var item_pocket := ItemPocket.new()
 onready var language := Language.new()
 onready var location := Location.new()
+onready var location_area := LocationArea.new()
 
 var query: int = 0
 
@@ -339,6 +341,18 @@ func get_location(name_or_id) -> Dictionary:
 	return location.get_data()
 
 
+func get_location_area(name_or_id) -> Dictionary:
+	query = Get.LOCATION_AREA
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "location-area/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "location-area/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_location_area(<name_or_id>), <name_or_id> must be an int or String type.")
+	return location_area.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -595,6 +609,18 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("areas")
 			)
 			print(JSON.print(location.get_data(), "  "))
+
+		Get.LOCATION_AREA:
+			location_area.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("game_index"),
+				data.get("encounter_method_rates"),
+				data.get("location"),
+				data.get("names"),
+				data.get("pokemon_encounters")
+			)
+			print(JSON.print(location_area.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

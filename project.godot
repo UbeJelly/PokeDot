@@ -124,6 +124,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Resources/Location.gd"
 }, {
+"base": "Node",
+"class": "LocationArea",
+"language": "GDScript",
+"path": "res://Resources/LocationArea.gd"
+}, {
 "base": "HTTPRequest",
 "class": "PokeDotClient",
 "language": "GDScript",
@@ -158,6 +163,7 @@ _global_script_class_icons={
 "ItemPocket": "",
 "Language": "",
 "Location": "",
+"LocationArea": "",
 "PokeDotClient": "",
 "PokemonPagination": ""
 }
