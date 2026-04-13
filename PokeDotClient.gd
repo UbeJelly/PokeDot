@@ -22,6 +22,7 @@ enum Get {
 	ITEM_ATTRIBUTE,
 	ITEM_CATEGORY,
 	ITEM_FLING_EFFECT,
+	ITEM_POCKET
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -45,6 +46,7 @@ onready var item := Item.new()
 onready var item_attribute := ItemAttribute.new()
 onready var item_category := ItemCategory.new()
 onready var item_fling_effect := ItemFlingEffect.new()
+onready var item_pocket := ItemPocket.new()
 
 var query: int = 0
 
@@ -297,6 +299,18 @@ func get_item_fling_effect(name_or_id) -> Dictionary:
 	return item_fling_effect.get_data()
 
 
+func get_item_pocket(name_or_id) -> Dictionary:
+	query = Get.ITEM_POCKET
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "item-pocket/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "item-pocket/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_item_pocket(<name_or_id>), <name_or_id> must be an int or String type.")
+	return item_pocket.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -522,6 +536,15 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("items")
 			)
 			print(JSON.print(item_fling_effect.get_data(), "  "))
+
+		Get.ITEM_POCKET:
+			item_pocket.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("categories"),
+				data.get("names")
+			)
+			print(JSON.print(item_pocket.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
