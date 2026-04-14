@@ -41,6 +41,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_location_area(name_or_id)` - get the sections of areas, such as floors in a building or cave. Each area has its own set of possible Pokémon encounters.
 - `get_machine(id)` - get the items that teach moves to Pokemon. They vary from version to version, so it is not certain that one specific TM or HM corresponds to a single Machine.
 - `get_move(name_or_id)` - get the skills of Pokémon in battle. In battle, a Pokémon uses one move each turn. Some moves (including those learned by Hidden Machine) can be used outside of battle as well, usually for the purpose of removing obstacles or exploring new areas.
+- `get_move_ailment(name_or_id)` - get the status conditions which are caused by moves used during battle.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
