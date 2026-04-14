@@ -25,7 +25,8 @@ enum Get {
 	ITEM_POCKET,
 	LANGUAGE,
 	LOCATION,
-	LOCATION_AREA
+	LOCATION_AREA,
+	MACHINE
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -53,6 +54,7 @@ onready var item_pocket := ItemPocket.new()
 onready var language := Language.new()
 onready var location := Location.new()
 onready var location_area := LocationArea.new()
+onready var machine := Machine.new()
 
 var query: int = 0
 
@@ -353,6 +355,12 @@ func get_location_area(name_or_id) -> Dictionary:
 	return location_area.get_data()
 
 
+func get_machine(id:int = 0) -> Dictionary:
+	query = Get.MACHINE
+	PokeDotClient("https://pokeapi.co/api/v2/", "machine/%s/" % str(id))
+	return machine.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -621,6 +629,15 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("pokemon_encounters")
 			)
 			print(JSON.print(location_area.get_data(), "  "))
+
+		Get.MACHINE:
+			machine.set_data(
+				data.get("id"),
+				data.get("item"),
+				data.get("move"),
+				data.get("version_group")
+			)
+			print(JSON.print(machine.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
