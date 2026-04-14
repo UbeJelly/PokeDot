@@ -26,7 +26,8 @@ enum Get {
 	LANGUAGE,
 	LOCATION,
 	LOCATION_AREA,
-	MACHINE
+	MACHINE,
+	MOVE
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -55,6 +56,7 @@ onready var language := Language.new()
 onready var location := Location.new()
 onready var location_area := LocationArea.new()
 onready var machine := Machine.new()
+onready var move := Move.new()
 
 var query: int = 0
 
@@ -361,6 +363,18 @@ func get_machine(id:int = 0) -> Dictionary:
 	return machine.get_data()
 
 
+func get_move(name_or_id) -> Dictionary:
+	query = Get.MOVE
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "move/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "move/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_move(<name_or_id>), <name_or_id> must be an int or String type.")
+	return move.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -638,6 +652,34 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("version_group")
 			)
 			print(JSON.print(machine.get_data(), "  "))
+
+		Get.MOVE:
+			move.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("accuracy"),
+				data.get("effect_chance"),
+				data.get("pp"),
+				data.get("priority"),
+				data.get("power"),
+				data.get("contest_combos"),
+				data.get("contest_type"),
+				data.get("contest_effect"),
+				data.get("damage_class"),
+				data.get("effect_entries"),
+				data.get("effect_changes"),
+				data.get("generation"),
+				data.get("meta"),
+				data.get("names"),
+				data.get("past_values"),
+				data.get("stat_changes"),
+				data.get("super_contest_effect"),
+				data.get("target"),
+				data.get("type"),
+				data.get("learned_by_pokemon"),
+				data.get("flavor_text_entries")
+			)
+			print(JSON.print(move.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

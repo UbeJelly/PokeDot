@@ -134,6 +134,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Resources/Machine.gd"
 }, {
+"base": "Node",
+"class": "Move",
+"language": "GDScript",
+"path": "res://Resources/Move.gd"
+}, {
 "base": "HTTPRequest",
 "class": "PokeDotClient",
 "language": "GDScript",
@@ -170,6 +175,7 @@ _global_script_class_icons={
 "Location": "",
 "LocationArea": "",
 "Machine": "",
+"Move": "",
 "PokeDotClient": "",
 "PokemonPagination": ""
 }
