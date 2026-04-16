@@ -190,6 +190,11 @@ _global_script_classes=[ {
 "path": "res://PokeDotClient.gd"
 }, {
 "base": "Node",
+"class": "Pokedex",
+"language": "GDScript",
+"path": "res://Resources/Pokedex.gd"
+}, {
+"base": "Node",
 "class": "PokemonPagination",
 "language": "GDScript",
 "path": "res://Resources/PokemonPagination.gd"
@@ -231,6 +236,7 @@ _global_script_class_icons={
 "PalParkArea": "",
 "PokeAthlonStat": "",
 "PokeDotClient": "",
+"Pokedex": "",
 "PokemonPagination": ""
 }
 

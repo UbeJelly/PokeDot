@@ -50,6 +50,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_nature(name_or_id)` - get the influence on how a Pokemon's stats grow.
 - `get_pal_park_area(name_or_id)` - get the areas used for grouping Pokémon encounters in Pal Park. They're like habitats that are specific to Pal Park.
 - `get_pokeathlon_stat(name_or_id)` - get the different attributes of a Pokemon's performance in Pokéathlons. In Pokéathlons, competitions happen on different courses; one for each of the different Pokéathlon stats.
+- `get_pokedex(name_or_id)` - get a handheld electronic encyclopedia device; one which is capable of recording and retaining information of the various Pokémon in a given region with the exception of the national dex and some smaller dexes related to portions of a region.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
