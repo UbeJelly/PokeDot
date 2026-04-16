@@ -48,6 +48,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_move_learn_method(name_or_id)` - get the methods by which Pokemon can learn moves.
 - `get_move_target(name_or_id)` - get the targets which moves can be directed at during battle. Targets can be Pokemon, environments or even other moves.
 - `get_nature(name_or_id)` - get the influence on how a Pokemon's stats grow.
+- `get_pal_park_area(name_or_id)` - get the areas used for grouping Pokémon encounters in Pal Park. They're like habitats that are specific to Pal Park.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
