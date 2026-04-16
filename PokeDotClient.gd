@@ -32,7 +32,8 @@ enum Get {
 	MOVE_BATTLE_STYLE,
 	MOVE_CATEGORY,
 	MOVE_DAMAGE_CLASS,
-	MOVE_LEARN_METHOD
+	MOVE_LEARN_METHOD,
+	MOVE_TARGET
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -67,6 +68,7 @@ onready var move_battle_style := MoveBattleStyle.new()
 onready var move_category := MoveCategory.new()
 onready var move_damage_class := MoveDamageClass.new()
 onready var move_learn_method := MoveLearnMethod.new()
+onready var move_target := MoveTarget.new()
 
 var query: int = 0
 
@@ -445,6 +447,18 @@ func get_move_learn_method(name_or_id) -> Dictionary:
 	return move_learn_method.get_data()
 
 
+func get_move_target(name_or_id) -> Dictionary:
+	query = Get.MOVE_TARGET
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "move-target/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "move-target/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_move_target(<name_or_id>), <name_or_id> must be an int or String type.")
+	return move_target.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -795,6 +809,16 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("version_groups")
 			)
 			print(JSON.print(move_learn_method.get_data(), "  "))
+
+		Get.MOVE_TARGET:
+			move_target.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("descriptions"),
+				data.get("moves"),
+				data.get("names")
+			)
+			print(JSON.print(move_target.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
