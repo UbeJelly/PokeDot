@@ -35,7 +35,8 @@ enum Get {
 	MOVE_LEARN_METHOD,
 	MOVE_TARGET,
 	NATURE,
-	PAL_PARK_AREA
+	PAL_PARK_AREA,
+	POKEATHLON_STAT
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -73,6 +74,7 @@ onready var move_learn_method := MoveLearnMethod.new()
 onready var move_target := MoveTarget.new()
 onready var nature := Nature.new()
 onready var pal_park_area := PalParkArea.new()
+onready var pokeathlon_stat := PokeAthlonStat.new()
 
 var query: int = 0
 
@@ -487,6 +489,18 @@ func get_pal_park_area(name_or_id) -> Dictionary:
 	return pal_park_area.get_data()
 
 
+func get_pokeathlon_stat(name_or_id) -> Dictionary:
+	query = Get.POKEATHLON_STAT
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "pokeathlon-stat/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "pokeathlon-stat/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_pokeathlon_stat(<name_or_id>), <name_or_id> must be an int or String type.")
+	return pokeathlon_stat.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -870,6 +884,15 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("pokemon_encounters")
 			)
 			print(JSON.print(pal_park_area.get_data(), "  "))
+
+		Get.POKEATHLON_STAT:
+			pokeathlon_stat.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("affecting_natures"),
+				data.get("names")
+			)
+			print(JSON.print(pokeathlon_stat.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
