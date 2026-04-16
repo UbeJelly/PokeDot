@@ -44,6 +44,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_move_ailment(name_or_id)` - get the status conditions which are caused by moves used during battle.
 - `get_move_battle_style(name_or_id)` - get the styles of moves when used in the Battle Palace.
 - `get_move_category(name_or_id)` - get the very general categories that loosely group move effects.
+- `get_move_damage_class(name_or_id)` - get the damage classes moves can have, e.g. physical, special, or non-damaging.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
