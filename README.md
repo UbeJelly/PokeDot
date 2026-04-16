@@ -42,6 +42,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_machine(id)` - get the items that teach moves to Pokemon. They vary from version to version, so it is not certain that one specific TM or HM corresponds to a single Machine.
 - `get_move(name_or_id)` - get the skills of Pokémon in battle. In battle, a Pokémon uses one move each turn. Some moves (including those learned by Hidden Machine) can be used outside of battle as well, usually for the purpose of removing obstacles or exploring new areas.
 - `get_move_ailment(name_or_id)` - get the status conditions which are caused by moves used during battle.
+- `get_move_battle_style(name_or_id)` - get the styles of moves when used in the Battle Palace.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 

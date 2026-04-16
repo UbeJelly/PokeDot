@@ -28,7 +28,8 @@ enum Get {
 	LOCATION_AREA,
 	MACHINE,
 	MOVE,
-	MOVE_AILMENT
+	MOVE_AILMENT,
+	MOVE_BATTLE_STYLE
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -59,6 +60,7 @@ onready var location_area := LocationArea.new()
 onready var machine := Machine.new()
 onready var move := Move.new()
 onready var move_ailment := MoveAilment.new()
+onready var move_battle_style := MoveBattleStyle.new()
 
 var query: int = 0
 
@@ -389,6 +391,18 @@ func get_move_ailment(name_or_id) -> Dictionary:
 	return move_ailment.get_data()
 
 
+func get_move_battle_style(name_or_id) -> Dictionary:
+	query = Get.MOVE_BATTLE_STYLE
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "move-battle-style/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "move-battle-style/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_move_battle_style(<name_or_id>), <name_or_id> must be an int or String type.")
+	return move_battle_style.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -703,6 +717,14 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("names")
 			)
 			print(JSON.print(move_ailment.get_data(), "  "))
+
+		Get.MOVE_BATTLE_STYLE:
+			move_battle_style.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("names")
+			)
+			print(JSON.print(move_battle_style.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
