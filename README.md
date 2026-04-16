@@ -45,6 +45,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_move_battle_style(name_or_id)` - get the styles of moves when used in the Battle Palace.
 - `get_move_category(name_or_id)` - get the very general categories that loosely group move effects.
 - `get_move_damage_class(name_or_id)` - get the damage classes moves can have, e.g. physical, special, or non-damaging.
+- `get_move_learn_method(name_or_id)` - get the methods by which Pokemon can learn moves.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
