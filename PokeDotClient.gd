@@ -33,7 +33,8 @@ enum Get {
 	MOVE_CATEGORY,
 	MOVE_DAMAGE_CLASS,
 	MOVE_LEARN_METHOD,
-	MOVE_TARGET
+	MOVE_TARGET,
+	NATURE
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -69,6 +70,7 @@ onready var move_category := MoveCategory.new()
 onready var move_damage_class := MoveDamageClass.new()
 onready var move_learn_method := MoveLearnMethod.new()
 onready var move_target := MoveTarget.new()
+onready var nature := Nature.new()
 
 var query: int = 0
 
@@ -459,6 +461,18 @@ func get_move_target(name_or_id) -> Dictionary:
 	return move_target.get_data()
 
 
+func get_nature(name_or_id) -> Dictionary:
+	query = Get.NATURE
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "nature/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "nature/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_nature(<name_or_id>), <name_or_id> must be an int or String type.")
+	return nature.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -819,6 +833,20 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("names")
 			)
 			print(JSON.print(move_target.get_data(), "  "))
+
+		Get.NATURE:
+			nature.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("decreased_stat"),
+				data.get("increased_stat"),
+				data.get("likes_flavor"),
+				data.get("hates_flavor"),
+				data.get("pokeathlon_stat_changes"),
+				data.get("move_battle_style_preferences"),
+				data.get("names")
+			)
+			print(JSON.print(nature.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
