@@ -45,7 +45,8 @@ enum Get {
 	POKEMON_SHAPE,
 	POKEMON_SPECIES,
 	REGION,
-	STAT
+	STAT,
+	SUPER_CONTEST_EFFECT
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -93,6 +94,7 @@ onready var pokemon_shape := PokemonShape.new()
 onready var pokemon_species := PokemonSpecies.new()
 onready var region := Region.new()
 onready var stat := Stat.new()
+onready var super_contest_effect := SuperContestEffect.new()
 
 var query: int = 0
 
@@ -627,6 +629,18 @@ func get_stat(name_or_id) -> Dictionary:
 	return stat.get_data()
 
 
+func get_super_contest_effect(name_or_id) -> Dictionary:
+	query = Get.SUPER_CONTEST_EFFECT
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "super-contest-effect/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "super-contest-effect/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_super_contest_effect(<name_or_id>), <name_or_id> must be an int or String type.")
+	return super_contest_effect.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -1145,7 +1159,7 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("version_groups")
 			)
 			print(JSON.print(region.get_data(), "  "))
-		
+
 		Get.STAT:
 			stat.set_data(
 				data.get("id"),
@@ -1159,6 +1173,15 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("names")
 			)
 			print(JSON.print(stat.get_data(), "  "))
+
+		Get.SUPER_CONTEST_EFFECT:
+			super_contest_effect.set_data(
+				data.get("id"),
+				data.get("appeal"),
+				data.get("flavor_text_entries"),
+				data.get("moves")
+			)
+			print(JSON.print(super_contest_effect.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
