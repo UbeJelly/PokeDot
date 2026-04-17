@@ -61,6 +61,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_stat(name_or_id)` - get what determines certain aspects of battles. Each Pokémon has a value for each stat which grows as they gain levels and can be altered momentarily by effects in battles.
 - `get_super_contest_effect(name_or_id)` - get the effects of moves when used in super contests.
 - `get_type(name_or_id)` - get the properties for Pokémon and their moves. Each type has three properties: which types of Pokémon it is super effective against, which types of Pokémon it is not very effective against, and which types of Pokémon it is completely ineffective against.
+- `get_version(name_or_id)` - get the versions of the games, e.g., Red, Blue or Yellow.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 
