@@ -41,7 +41,8 @@ enum Get {
 	POKEMON,
 	POKEMON_COLOR,
 	POKEMON_FORM,
-	POKEMON_HABITAT
+	POKEMON_HABITAT,
+	POKEMON_SHAPE
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -85,6 +86,7 @@ onready var pokemon := Pokemon.new()
 onready var pokemon_color := PokemonColor.new()
 onready var pokemon_form := PokemonForm.new()
 onready var pokemon_habitat := PokemonHabitat.new()
+onready var pokemon_shape := PokemonShape.new()
 
 var query: int = 0
 
@@ -571,6 +573,18 @@ func get_pokemon_habitat(name_or_id) -> Dictionary:
 	return pokemon_habitat.get_data()
 
 
+func get_pokemon_shape(name_or_id) -> Dictionary:
+	query = Get.POKEMON_SHAPE
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-shape/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-shape/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_pokemon_shape(<name_or_id>), <name_or_id> must be an int or String type.")
+	return pokemon_shape.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -1036,6 +1050,16 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("pokemon_species")
 			)
 			print(JSON.print(pokemon_habitat.get_data(), "  "))
+
+		Get.POKEMON_SHAPE:
+			pokemon_shape.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("awesome_names"),
+				data.get("names"),
+				data.get("pokemon_species")
+			)
+			print(JSON.print(pokemon_shape.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

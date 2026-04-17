@@ -55,6 +55,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_pokemon_color(name_or_id)` - get the colors used for sorting Pokémon in a Pokédex. The color listed in the Pokédex is usually the color most apparent or covering each Pokémon's body. No orange category exists; Pokémon that are primarily orange are listed as red or brown.
 - `get_pokemon_form(name_or_id)` - get some visually different forms of a Pokemon. These differences are purely cosmetic. For variations within a Pokémon species, which do differ in more than just visuals, the 'Pokémon' entity is used to represent such a variety.
 - `get_pokemon_habitat(name_or_id)` - get the different terrain where Pokémon can be found in.
+- `get_pokemon_shape(name_or_id)` - get the shapes used for sorting Pokémon in a Pokédex.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 

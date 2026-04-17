@@ -218,6 +218,11 @@ _global_script_classes=[ {
 "class": "PokemonPagination",
 "language": "GDScript",
 "path": "res://Resources/PokemonPagination.gd"
+}, {
+"base": "Node",
+"class": "PokemonShape",
+"language": "GDScript",
+"path": "res://Resources/PokemonShape.gd"
 } ]
 _global_script_class_icons={
 "Ability": "",
@@ -261,7 +266,8 @@ _global_script_class_icons={
 "PokemonColor": "",
 "PokemonForm": "",
 "PokemonHabitat": "",
-"PokemonPagination": ""
+"PokemonPagination": "",
+"PokemonShape": ""
 }
 
 [application]
