@@ -48,7 +48,8 @@ enum Get {
 	STAT,
 	SUPER_CONTEST_EFFECT,
 	TYPE,
-	VERSION
+	VERSION,
+	VERSION_GROUP
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -99,6 +100,7 @@ onready var stat := Stat.new()
 onready var super_contest_effect := SuperContestEffect.new()
 onready var type := Type.new()
 onready var version := Version.new()
+onready var version_group := VersionGroup.new()
 
 var query: int = 0
 
@@ -669,6 +671,18 @@ func get_version(name_or_id) -> Dictionary:
 	return version.get_data()
 
 
+func get_version_group(name_or_id) -> Dictionary:
+	query = Get.VERSION_GROUP
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "version-group/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "version-group/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_version_group(<name_or_id>), <name_or_id> must be an int or String type.")
+	return version_group.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -1234,6 +1248,19 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("version_group")
 			)
 			print(JSON.print(version.get_data(), "  "))
+
+		Get.VERSION_GROUP:
+			version_group.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("order"),
+				data.get("generation"),
+				data.get("move_learn_methods"),
+				data.get("pokedexes"),
+				data.get("regions"),
+				data.get("versions")
+			)
+			print(JSON.print(version_group.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

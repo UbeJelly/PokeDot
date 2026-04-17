@@ -253,6 +253,11 @@ _global_script_classes=[ {
 "class": "Version",
 "language": "GDScript",
 "path": "res://Resources/Version.gd"
+}, {
+"base": "Node",
+"class": "VersionGroup",
+"language": "GDScript",
+"path": "res://Resources/VersionGroup.gd"
 } ]
 _global_script_class_icons={
 "Ability": "",
@@ -303,7 +308,8 @@ _global_script_class_icons={
 "Stat": "",
 "SuperContestEffect": "",
 "Type": "",
-"Version": ""
+"Version": "",
+"VersionGroup": ""
 }
 
 [application]
