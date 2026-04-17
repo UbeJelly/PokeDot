@@ -58,6 +58,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_pokemon_shape(name_or_id)` - get the shapes used for sorting Pokémon in a Pokédex.
 - `get_pokemon_species(name_or_id)` - get the basis for at least one Pokémon. Attributes of a Pokémon species are shared across all varieties of Pokémon within the species. A good example is Wormadam; Wormadam is the species which can be found in three different varieties, Wormadam-Trash, Wormadam-Sandy and Wormadam-Plant.
 - `get_region(name_or_id)` - get an organized area of the Pokémon world. Most often, the main difference between regions is the species of Pokémon that can be encountered within them.
+- `get_stat(name_or_id)` - get what determines certain aspects of battles. Each Pokémon has a value for each stat which grows as they gain levels and can be altered momentarily by effects in battles.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 

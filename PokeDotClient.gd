@@ -44,7 +44,8 @@ enum Get {
 	POKEMON_HABITAT,
 	POKEMON_SHAPE,
 	POKEMON_SPECIES,
-	REGION
+	REGION,
+	STAT
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -91,6 +92,7 @@ onready var pokemon_habitat := PokemonHabitat.new()
 onready var pokemon_shape := PokemonShape.new()
 onready var pokemon_species := PokemonSpecies.new()
 onready var region := Region.new()
+onready var stat := Stat.new()
 
 var query: int = 0
 
@@ -613,6 +615,18 @@ func get_region(name_or_id) -> Dictionary:
 	return region.get_data()
 
 
+func get_stat(name_or_id) -> Dictionary:
+	query = Get.STAT
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "stat/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "stat/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_stat(<name_or_id>), <name_or_id> must be an int or String type.")
+	return stat.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -1131,6 +1145,20 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("version_groups")
 			)
 			print(JSON.print(region.get_data(), "  "))
+		
+		Get.STAT:
+			stat.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("game_index"),
+				data.get("is_battle_only"),
+				data.get("affecting_moves"),
+				data.get("affecting_natures"),
+				data.get("characteristics"),
+				data.get("move_damage_class"),
+				data.get("names")
+			)
+			print(JSON.print(stat.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
