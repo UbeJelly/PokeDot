@@ -56,6 +56,7 @@ Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
 - `get_pokemon_form(name_or_id)` - get some visually different forms of a Pokemon. These differences are purely cosmetic. For variations within a Pokémon species, which do differ in more than just visuals, the 'Pokémon' entity is used to represent such a variety.
 - `get_pokemon_habitat(name_or_id)` - get the different terrain where Pokémon can be found in.
 - `get_pokemon_shape(name_or_id)` - get the shapes used for sorting Pokémon in a Pokédex.
+- `get_pokemon_species(name_or_id)` - get the basis for at least one Pokémon. Attributes of a Pokémon species are shared across all varieties of Pokémon within the species. A good example is Wormadam; Wormadam is the species which can be found in three different varieties, Wormadam-Trash, Wormadam-Sandy and Wormadam-Plant.
 
 To see more info on what they return, please refer to [PokeDotClient.gd](https://github.com/UbeJelly/PokeDot/blob/master/PokeDotClient.gd) or [PokéApi](https://pokeapi.co/).
 

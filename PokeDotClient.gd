@@ -42,7 +42,8 @@ enum Get {
 	POKEMON_COLOR,
 	POKEMON_FORM,
 	POKEMON_HABITAT,
-	POKEMON_SHAPE
+	POKEMON_SHAPE,
+	POKEMON_SPECIES
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -87,6 +88,7 @@ onready var pokemon_color := PokemonColor.new()
 onready var pokemon_form := PokemonForm.new()
 onready var pokemon_habitat := PokemonHabitat.new()
 onready var pokemon_shape := PokemonShape.new()
+onready var pokemon_species := PokemonSpecies.new()
 
 var query: int = 0
 
@@ -585,6 +587,18 @@ func get_pokemon_shape(name_or_id) -> Dictionary:
 	return pokemon_shape.get_data()
 
 
+func get_pokemon_species(name_or_id) -> Dictionary:
+	query = Get.POKEMON_SPECIES
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-species/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-species/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_pokemon_species(<name_or_id>), <name_or_id> must be an int or String type.")
+	return pokemon_species.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -1060,6 +1074,37 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("pokemon_species")
 			)
 			print(JSON.print(pokemon_shape.get_data(), "  "))
+
+		Get.POKEMON_SPECIES:
+			pokemon_species.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("order"),
+				data.get("gender_rate"),
+				data.get("capture_rate"),
+				data.get("base_happiness"),
+				data.get("is_baby"),
+				data.get("is_legendary"),
+				data.get("is_mythical"),
+				data.get("hatch_counter"),
+				data.get("has_gender_differences"),
+				data.get("forms_switchable"),
+				data.get("growth_rate"),
+				data.get("pokedex_numbers"),
+				data.get("egg_groups"),
+				data.get("color"),
+				data.get("shape"),
+				data.get("evolves_from_species"),
+				data.get("evolution_chain"),
+				data.get("habitat"),
+				data.get("generation"),
+				data.get("names"),
+				data.get("flavor_text_entries"),
+				data.get("form_descriptions"),
+				data.get("genera"),
+				data.get("varieties")
+			)
+			print(JSON.print(pokemon_species.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:

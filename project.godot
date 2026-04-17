@@ -223,6 +223,11 @@ _global_script_classes=[ {
 "class": "PokemonShape",
 "language": "GDScript",
 "path": "res://Resources/PokemonShape.gd"
+}, {
+"base": "Node",
+"class": "PokemonSpecies",
+"language": "GDScript",
+"path": "res://Resources/PokemonSpecies.gd"
 } ]
 _global_script_class_icons={
 "Ability": "",
@@ -267,7 +272,8 @@ _global_script_class_icons={
 "PokemonForm": "",
 "PokemonHabitat": "",
 "PokemonPagination": "",
-"PokemonShape": ""
+"PokemonShape": "",
+"PokemonSpecies": ""
 }
 
 [application]
