@@ -46,7 +46,8 @@ enum Get {
 	POKEMON_SPECIES,
 	REGION,
 	STAT,
-	SUPER_CONTEST_EFFECT
+	SUPER_CONTEST_EFFECT,
+	TYPE
 }
 
 onready var pokemon_pagination := PokemonPagination.new()
@@ -95,6 +96,7 @@ onready var pokemon_species := PokemonSpecies.new()
 onready var region := Region.new()
 onready var stat := Stat.new()
 onready var super_contest_effect := SuperContestEffect.new()
+onready var type := Type.new()
 
 var query: int = 0
 
@@ -641,6 +643,18 @@ func get_super_contest_effect(name_or_id) -> Dictionary:
 	return super_contest_effect.get_data()
 
 
+func get_type(name_or_id) -> Dictionary:
+	query = Get.TYPE
+	match typeof(name_or_id):
+		TYPE_STRING:
+			PokeDotClient("https://pokeapi.co/api/v2/", "type/%s/" % name_or_id)
+		TYPE_INT:
+			PokeDotClient("https://pokeapi.co/api/v2/", "type/%s/" % str(name_or_id))
+		_:
+			printerr("ERROR: get_type(<name_or_id>), <name_or_id> must be an int or String type.")
+	return type.get_data()
+
+
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
 	print("HTTP request code: %s" % _get_result(result))
@@ -1182,6 +1196,21 @@ func _on_request_completed(result, response_code, headers, body) -> void:
 				data.get("moves")
 			)
 			print(JSON.print(super_contest_effect.get_data(), "  "))
+
+		Get.TYPE:
+			type.set_data(
+				data.get("id"),
+				data.get("name"),
+				data.get("damage_relations"),
+				data.get("past_damage_relations"),
+				data.get("game_indices"),
+				data.get("generation"),
+				data.get("move_damage_class"),
+				data.get("names"),
+				data.get("pokemon"),
+				data.get("moves")
+			)
+			print(JSON.print(type.get_data(), "  "))
 
 
 func _parse_JSON(body: PoolByteArray) -> Dictionary:
