@@ -210,6 +210,11 @@ _global_script_classes=[ {
 "path": "res://Resources/PokemonForm.gd"
 }, {
 "base": "Node",
+"class": "PokemonHabitat",
+"language": "GDScript",
+"path": "res://Resources/PokemonHabitat.gd"
+}, {
+"base": "Node",
 "class": "PokemonPagination",
 "language": "GDScript",
 "path": "res://Resources/PokemonPagination.gd"
@@ -255,6 +260,7 @@ _global_script_class_icons={
 "Pokemon": "",
 "PokemonColor": "",
 "PokemonForm": "",
+"PokemonHabitat": "",
 "PokemonPagination": ""
 }
 
