@@ -31,14 +31,14 @@ class_name MoveLearnMethod extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _names: Array = [], _descriptions: Array = [], _version_groups: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", names: Array = [], descriptions: Array = [], version_groups: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"names": _names,
-		"descriptions": _descriptions,
-		"version_groups": _version_groups
+		"names": names,
+		"descriptions": descriptions,
+		"version_groups": version_groups
 	}
 
 

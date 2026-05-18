@@ -31,14 +31,14 @@ class_name PokemonShape extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _awesome_names: Array = [], _names: Array = [], _pokemon_species: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", awesome_names: Array = [], names: Array = [], pokemon_species: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"awesome_names": _awesome_names,
-		"names": _names,
-		"pokemon_species": _pokemon_species
+		"awesome_names": awesome_names,
+		"names": names,
+		"pokemon_species": pokemon_species
 	}
 
 

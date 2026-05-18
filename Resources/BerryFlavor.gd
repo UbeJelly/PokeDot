@@ -29,13 +29,13 @@ class_name BerryFlavor extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _berries: Array = [], _contest_type: Dictionary = {}, _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", berries: Array = [], contest_type: Dictionary = {}, names: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"berries": _berries,
-		"contest_type": _contest_type,
-		"names": _names,
+		"berries": berries,
+		"contest_type": contest_type,
+		"names": names,
 	}
 
 

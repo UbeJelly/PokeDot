@@ -51,18 +51,18 @@ class_name Nature extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _decreased_stat = null, _increased_stat = null, _likes_flavor = null, _hates_flavor = null, _pokeathlon_stat_changes: Array = [], _move_battle_style_preferences: Array = [], _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", decreased_stat = null, increased_stat = null, likes_flavor = null, hates_flavor = null, pokeathlon_stat_changes: Array = [], move_battle_style_preferences: Array = [], names: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"decreased_stat": _decreased_stat,
-		"increased_stat": _increased_stat,
-		"likes_flavor": _likes_flavor,
-		"hates_flavor": _hates_flavor,
-		"pokeathlon_stat_changes": _pokeathlon_stat_changes,
-		"move_battle_style_preferences": _move_battle_style_preferences,
-		"names": _names,
+		"decreased_stat": decreased_stat,
+		"increased_stat": increased_stat,
+		"likes_flavor": likes_flavor,
+		"hates_flavor": hates_flavor,
+		"pokeathlon_stat_changes": pokeathlon_stat_changes,
+		"move_battle_style_preferences": move_battle_style_preferences,
+		"names": names,
 	}
 
 

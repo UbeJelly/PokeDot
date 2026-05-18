@@ -40,21 +40,21 @@ class_name PokemonForm extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _order: int = 0, _form_order: int = 0, _is_default: bool = false, _is_battle_only: bool = false, _is_mega: bool = false, _form_name: String = "", _pokemon: Dictionary = {}, _sprites: Dictionary = {}, _types: Array = [], _version_group: Dictionary = {}) -> void:
+func set_data(id: int = 0, _name: String = "", order: int = 0, form_order: int = 0, is_default: bool = false, is_battle_only: bool = false, is_mega: bool = false, form_name: String = "", pokemon: Dictionary = {}, sprites: Dictionary = {}, types: Array = [], version_group: Dictionary = {}) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"order": _order,
-		"form_order": _form_order,
-		"is_default": _is_default,
-		"is_battle_only": _is_battle_only,
-		"is_mega": _is_mega,
-		"form_name": _form_name,
-		"pokemon": _pokemon,
-		"sprites": _sprites,
-		"types": _types,
-		"version_group": _version_group
+		"order": order,
+		"form_order": form_order,
+		"is_default": is_default,
+		"is_battle_only": is_battle_only,
+		"is_mega": is_mega,
+		"form_name": form_name,
+		"pokemon": pokemon,
+		"sprites": sprites,
+		"types": types,
+		"version_group": version_group
 	}
 
 

@@ -22,12 +22,12 @@ class_name BerryFirmness extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _berries: Array = [], _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", berries: Array = [], names: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"berries": _berries,
-		"names": _names
+		"berries": berries,
+		"names": names
 	}
 
 

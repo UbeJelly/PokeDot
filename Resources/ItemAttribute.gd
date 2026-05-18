@@ -31,13 +31,13 @@ class_name ItemAttribute extends Node
 }
 
 
-func set_data(_descriptions: Array = [], _id: int = 0, _items: Array = [], _name: String = "", _names: Array = []) -> void:
+func set_data(descriptions: Array = [], id: int = 0, items: Array = [], _name: String = "", names: Array = []) -> void:
 	data = {
-		"descriptions": _descriptions,
-		"id": _id,
-		"items": _items,
+		"descriptions": descriptions,
+		"id": id,
+		"items": items,
 		"name": _name,
-		"names": _names
+		"names": names
 	}
 
 

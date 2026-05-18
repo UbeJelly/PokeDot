@@ -36,17 +36,17 @@ class_name VersionGroup extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _order: int = 0, _generation: Dictionary = {}, _move_learn_methods: Array = [], _pokedexes: Array = [], _regions: Array = [], _versions: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", order: int = 0, generation: Dictionary = {}, move_learn_methods: Array = [], pokedexes: Array = [], regions: Array = [], versions: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"order": _order,
-		"generation": _generation,
-		"move_learn_methods": _move_learn_methods,
-		"pokedexes": _pokedexes,
-		"regions": _regions,
-		"versions": _versions
+		"order": order,
+		"generation": generation,
+		"move_learn_methods": move_learn_methods,
+		"pokedexes": pokedexes,
+		"regions": regions,
+		"versions": versions
 	}
 
 

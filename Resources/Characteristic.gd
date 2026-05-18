@@ -29,13 +29,13 @@ class_name Characteristic extends Node
 }
 
 
-func set_data(_id: int = 0, _gene_modulo: int = 0, _possible_values: Array = [], _highest_stat: Dictionary = {}, _descriptions: Array = []) -> void:
+func set_data(id: int = 0, gene_modulo: int = 0, possible_values: Array = [], highest_stat: Dictionary = {}, descriptions: Array = []) -> void:
 	data = {
-		"id": _id,
-		"gene_modulo": _gene_modulo,
-		"possible_values": _possible_values,
-		"highest_stat": _highest_stat,
-		"descriptions": _descriptions
+		"id": id,
+		"gene_modulo": gene_modulo,
+		"possible_values": possible_values,
+		"highest_stat": highest_stat,
+		"descriptions": descriptions
 	}
 
 

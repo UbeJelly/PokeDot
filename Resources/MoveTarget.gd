@@ -31,14 +31,14 @@ class_name MoveTarget extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _descriptions: Array = [], _moves: Array = [], _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", descriptions: Array = [], moves: Array = [], names: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"descriptions": _descriptions,
-		"moves": _moves,
-		"names": _names
+		"descriptions": descriptions,
+		"moves": moves,
+		"names": names
 	}
 
 

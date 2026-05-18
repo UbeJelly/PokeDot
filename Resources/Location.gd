@@ -35,14 +35,14 @@ class_name Location extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _region: Dictionary = {}, _names: Array = [], _game_indices: Array = [], _areas: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", region: Dictionary = {}, names: Array = [], game_indices: Array = [], areas: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"region": _region,
-		"names": _names,
-		"game_indices": _game_indices,
-		"areas": _areas
+		"region": region,
+		"names": names,
+		"game_indices": game_indices,
+		"areas": areas
 	}
 
 

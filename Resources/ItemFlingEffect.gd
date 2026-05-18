@@ -22,12 +22,12 @@ class_name ItemFlingEffect extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _effect_entries: Array = [], _items: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", effect_entries: Array = [], items: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"effect_entries": _effect_entries,
-		"items": _items
+		"effect_entries": effect_entries,
+		"items": items
 	}
 
 

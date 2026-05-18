@@ -26,13 +26,13 @@ class_name ContestEffect extends Node
 }
 
 
-func set_data(_id: int = 0, _appeal: int = 0, _jam: int = 0, _effect_entries: Array = [], _flavor_text_entries: Array = []) -> void:
+func set_data(id: int = 0, appeal: int = 0, jam: int = 0, effect_entries: Array = [], flavor_text_entries: Array = []) -> void:
 	data = {
-		"id": _id,
-		"appeal": _appeal,
-		"jam": _jam,
-		"effect_entries": _effect_entries,
-		"flavor_text_entries": _flavor_text_entries
+		"id": id,
+		"appeal": appeal,
+		"jam": jam,
+		"effect_entries": effect_entries,
+		"flavor_text_entries": flavor_text_entries
 	}
 
 

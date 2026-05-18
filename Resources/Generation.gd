@@ -45,17 +45,17 @@ class_name Generation extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _abilities: Array = [], _main_region: Dictionary = {}, _moves: Array = [], _names: Array = [], _pokemon_species: Array = [], _types: Array = [], _version_groups: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", abilities: Array = [], main_region: Dictionary = {}, moves: Array = [], names: Array = [], pokemon_species: Array = [], types: Array = [], version_groups: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"abilities": _abilities,
-		"main_region": _main_region,
-		"moves": _moves,
-		"names": _names,
-		"pokemon_species": _pokemon_species,
-		"types": _types,
-		"version_groups": _version_groups
+		"abilities": abilities,
+		"main_region": main_region,
+		"moves": moves,
+		"names": names,
+		"pokemon_species": pokemon_species,
+		"types": types,
+		"version_groups": version_groups
 	}
 
 

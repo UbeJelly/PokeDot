@@ -20,12 +20,12 @@ class_name EncounterConditionValue extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _condition: Dictionary = {}, _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", condition: Dictionary = {}, names: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"condition": _condition,
-		"names": _names
+		"condition": condition,
+		"names": names
 	}
 
 

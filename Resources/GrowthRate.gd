@@ -29,14 +29,14 @@ class_name GrowthRate extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _formula: String = "", _descriptions: Array = [], _levels: Array = [], _pokemon_species: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", formula: String = "", descriptions: Array = [], levels: Array = [], pokemon_species: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"formula": _formula,
-		"descriptions": _descriptions,
-		"levels": _levels,
-		"pokemon_species": _pokemon_species
+		"formula": formula,
+		"descriptions": descriptions,
+		"levels": levels,
+		"pokemon_species": pokemon_species
 	}
 
 

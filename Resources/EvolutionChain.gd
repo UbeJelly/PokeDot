@@ -50,11 +50,11 @@ class_name EvolutionChain extends Node
 }
 
 
-func set_data(_id: int = 0, _baby_trigger_item = null, _chain: Dictionary = {}) -> void:
+func set_data(id: int = 0, baby_trigger_item = null, chain: Dictionary = {}) -> void:
 	data = {
-		"id": _id,
-		"baby_trigger_item": _baby_trigger_item,
-		"chain": _chain
+		"id": id,
+		"baby_trigger_item": baby_trigger_item,
+		"chain": chain
 	}
 
 

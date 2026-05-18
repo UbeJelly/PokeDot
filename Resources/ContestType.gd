@@ -21,12 +21,12 @@ class_name ContestType extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _berry_flavor: Dictionary = {}, _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", berry_flavor: Dictionary = {}, names: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"berry_flavor": _berry_flavor,
-		"names": _names
+		"berry_flavor": berry_flavor,
+		"names": names
 	}
 
 

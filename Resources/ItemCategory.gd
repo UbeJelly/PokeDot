@@ -26,13 +26,13 @@ class_name ItemCategory extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _items: Array = [], _names: Array = [], _pocket: Dictionary = {}) -> void:
+func set_data(id: int = 0, _name: String = "", items: Array = [], names: Array = [], pocket: Dictionary = {}) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"items": _items,
-		"names": _names,
-		"pocket": _pocket
+		"items": items,
+		"names": names,
+		"pocket": pocket
 	}
 
 

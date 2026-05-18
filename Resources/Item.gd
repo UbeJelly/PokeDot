@@ -79,17 +79,17 @@ class_name Item extends Node
 }
 
 
-func set_data(_attributes: Array = [], _category: Dictionary = {}, _effect_entries: Array = [], _flavor_text_entries: Array = [], _game_indices: Array = [], _names: Array = [], _sprites: Dictionary = {}, _held_by_pokemon: Array = [], _baby_trigger_for: Dictionary = {}) -> void:
+func set_data(attributes: Array = [], category: Dictionary = {}, effect_entries: Array = [], flavor_text_entries: Array = [], game_indices: Array = [], names: Array = [], sprites: Dictionary = {}, held_by_pokemon: Array = [], baby_trigger_for: Dictionary = {}) -> void:
 	data = {
-		"attributes": _attributes,
-		"category": _category,
-		"effect_entries": _effect_entries,
-		"flavor_text_entries": _flavor_text_entries,
-		"game_indices": _game_indices,
-		"names": _names,
-		"sprites": _sprites,
-		"held_by_pokemon": _held_by_pokemon,
-		"baby_trigger_for": _baby_trigger_for
+		"attributes": attributes,
+		"category": category,
+		"effect_entries": effect_entries,
+		"flavor_text_entries": flavor_text_entries,
+		"game_indices": game_indices,
+		"names": names,
+		"sprites": sprites,
+		"held_by_pokemon": held_by_pokemon,
+		"baby_trigger_for": baby_trigger_for
 	}
 
 

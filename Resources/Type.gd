@@ -132,19 +132,19 @@ class_name Type extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _damage_relations: Dictionary = {}, _past_damage_relations: Array = [], _game_indices: Array = [], _generation: Dictionary = {}, _move_damage_class: Dictionary = {}, _names: Array = [], _pokemon: Array = [], _moves: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", damage_relations: Dictionary = {}, past_damage_relations: Array = [], game_indices: Array = [], generation: Dictionary = {}, move_damage_class: Dictionary = {}, names: Array = [], pokemon: Array = [], moves: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"damage_relations": _damage_relations,
-		"past_damage_relations": _past_damage_relations,
-		"game_indices": _game_indices,
-		"generation": _generation,
-		"move_damage_class": _move_damage_class,
-		"names": _names,
-		"pokemon": _pokemon,
-		"moves": _moves
+		"damage_relations": damage_relations,
+		"past_damage_relations": past_damage_relations,
+		"game_indices": game_indices,
+		"generation": generation,
+		"move_damage_class": move_damage_class,
+		"names": names,
+		"pokemon": pokemon,
+		"moves": moves
 	}
 
 

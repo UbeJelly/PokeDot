@@ -26,13 +26,13 @@ class_name PalParkArea extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _names: Array = [], _pokemon_encounters: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", names: Array = [], pokemon_encounters: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"names": _names,
-		"pokemon_encounters": _pokemon_encounters
+		"names": names,
+		"pokemon_encounters": pokemon_encounters
 	}
 
 

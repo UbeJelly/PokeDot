@@ -22,13 +22,13 @@ class_name MoveAilment extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _moves: Array = [], _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", moves: Array = [], names: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"moves": _moves,
-		"names": _names
+		"moves": moves,
+		"names": names
 	}
 
 

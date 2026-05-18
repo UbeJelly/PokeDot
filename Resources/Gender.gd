@@ -22,12 +22,12 @@ class_name Gender extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _pokemon_species_details: Array = [], _required_for_evolution: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", pokemon_species_details: Array = [], required_for_evolution: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"pokemon_species_details": _pokemon_species_details,
-		"required_for_evolution": _required_for_evolution
+		"pokemon_species_details": pokemon_species_details,
+		"required_for_evolution": required_for_evolution
 	}
 
 

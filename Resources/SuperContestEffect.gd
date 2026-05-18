@@ -22,13 +22,13 @@ class_name SuperContestEffect extends Node
 }
 
 
-func set_data(_id: int = 0, _appeal: int = 0, _flavor_text_entries: Array = [], _moves: Array = []) -> void:
+func set_data(id: int = 0, appeal: int = 0, flavor_text_entries: Array = [], moves: Array = []) -> void:
 
 	data = {
-		"id": _id,
-		"appeal": _appeal,
-		"flavor_text_entries": _flavor_text_entries,
-		"moves": _moves,
+		"id": id,
+		"appeal": appeal,
+		"flavor_text_entries": flavor_text_entries,
+		"moves": moves,
 	}
 
 

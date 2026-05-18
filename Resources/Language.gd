@@ -19,14 +19,14 @@ class_name Language extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _official: bool = true, _iso639: String = "", _iso3166: String = "", _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", official: bool = true, iso639: String = "", iso3166: String = "", names: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"official": _official,
-		"iso639": _iso639,
-		"iso3166": _iso3166,
-		"names": _names
+		"official": official,
+		"iso639": iso639,
+		"iso3166": iso3166,
+		"names": names
 	}
 
 

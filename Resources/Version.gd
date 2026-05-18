@@ -20,13 +20,13 @@ class_name Version extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _names: Array = [], _version_group: Dictionary = {}) -> void:
+func set_data(id: int = 0, _name: String = "", names: Array = [], version_group: Dictionary = {}) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"names": _names,
-		"version_group": _version_group
+		"names": names,
+		"version_group": version_group
 	}
 
 

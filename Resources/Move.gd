@@ -122,32 +122,32 @@ class_name Move extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _accuracy: int = 0, _effect_chance = null, _pp: int = 0, _priority: int = 0, _power: int = 0, _contest_combos: Dictionary = {}, _contest_type: Dictionary = {}, _contest_effect: Dictionary = {}, _damage_class: Dictionary = {}, _effect_entries: Array = [], _effect_changes: Array = [], _generation: Dictionary = {}, _meta: Dictionary = {}, _names: Array = [], _past_values: Array = [], _stat_changes: Array = [], _super_contest_effect: Dictionary = {}, _target: Dictionary = {}, _type: Dictionary = {}, _learned_by_pokemon: Array = [], _flavor_text_entries: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", accuracy: int = 0, effect_chance = null, pp: int = 0, priority: int = 0, power: int = 0, contest_combos: Dictionary = {}, contest_type: Dictionary = {}, contest_effect: Dictionary = {}, damage_class: Dictionary = {}, effect_entries: Array = [], effect_changes: Array = [], generation: Dictionary = {}, meta: Dictionary = {}, names: Array = [], past_values: Array = [], stat_changes: Array = [], super_contest_effect: Dictionary = {}, target: Dictionary = {}, type: Dictionary = {}, learned_by_pokemon: Array = [], flavor_text_entries: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"accuracy": _accuracy,
-		"effect_chance": _effect_chance,
-		"pp": _pp,
-		"priority": _priority,
-		"power": _power,
-		"contest_combos": _contest_combos,
-		"contest_type": _contest_type,
-		"contest_effect": _contest_effect,
-		"damage_class": _damage_class,
-		"effect_entries": _effect_entries,
-		"effect_changes": _effect_changes,
-		"generation": _generation,
-		"meta": _meta,
-		"names": _names,
-		"past_values": _past_values,
-		"stat_changes": _stat_changes,
-		"super_contest_effect": _super_contest_effect,
-		"target": _target,
-		"type": _type,
-		"learned_by_pokemon": _learned_by_pokemon,
-		"flavor_text_entries": _flavor_text_entries
+		"accuracy": accuracy,
+		"effect_chance": effect_chance,
+		"pp": pp,
+		"priority": priority,
+		"power": power,
+		"contest_combos": contest_combos,
+		"contest_type": contest_type,
+		"contest_effect": contest_effect,
+		"damage_class": damage_class,
+		"effect_entries": effect_entries,
+		"effect_changes": effect_changes,
+		"generation": generation,
+		"meta": meta,
+		"names": names,
+		"past_values": past_values,
+		"stat_changes": stat_changes,
+		"super_contest_effect": super_contest_effect,
+		"target": target,
+		"type": type,
+		"learned_by_pokemon": learned_by_pokemon,
+		"flavor_text_entries": flavor_text_entries
 	}
 
 

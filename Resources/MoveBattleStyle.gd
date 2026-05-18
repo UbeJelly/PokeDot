@@ -16,12 +16,12 @@ class_name MoveBattleStyle extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", names: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"names": _names
+		"names": names
 	}
 
 

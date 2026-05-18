@@ -18,12 +18,12 @@ class_name Machine extends Node
 }
 
 
-func set_data(_id: int = 0, _item: Dictionary = {}, _move: Dictionary = {}, _version_group: Dictionary = {}) -> void:
+func set_data(id: int = 0, item: Dictionary = {}, move: Dictionary = {}, version_group: Dictionary = {}) -> void:
 	data = {
-		"id": _id,
-		"item": _item,
-		"move": _move,
-		"version_group": _version_group
+		"id": id,
+		"item": item,
+		"move": move,
+		"version_group": version_group
 	}
 
 

@@ -22,12 +22,12 @@ class_name EggGroup extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _names: Array = [], _pokemon_species: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", names: Array = [], pokemon_species: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"names": _names,
-		"pokemon_species": _pokemon_species
+		"names": names,
+		"pokemon_species": pokemon_species
 	}
 
 

@@ -67,15 +67,15 @@ class_name LocationArea extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _game_index: int = 0, _encounter_method_rates: Array = [], _location: Dictionary = {}, _names: Array = [], _pokemon_encounters: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", game_index: int = 0, encounter_method_rates: Array = [], location: Dictionary = {}, names: Array = [], pokemon_encounters: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"game_index": _game_index,
-		"encounter_method_rates": _encounter_method_rates,
-		"location": _location,
-		"names": _names,
-		"pokemon_encounters": _pokemon_encounters
+		"game_index": game_index,
+		"encounter_method_rates": encounter_method_rates,
+		"location": location,
+		"names": names,
+		"pokemon_encounters": pokemon_encounters
 	}
 
 

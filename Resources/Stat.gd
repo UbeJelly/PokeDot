@@ -61,18 +61,18 @@ class_name Stat extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _game_index: int = 0, _is_battle_only: bool = false, _affecting_moves: Dictionary = {}, _affecting_natures: Dictionary = {}, _characteristics: Array = [], _move_damage_class: Dictionary = {}, _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", game_index: int = 0, is_battle_only: bool = false, affecting_moves: Dictionary = {}, affecting_natures: Dictionary = {}, characteristics: Array = [], move_damage_class: Dictionary = {}, names: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"game_index": _game_index,
-		"is_battle_only": _is_battle_only,
-		"affecting_moves": _affecting_moves,
-		"affecting_natures": _affecting_natures,
-		"characteristics": _characteristics,
-		"move_damage_class": _move_damage_class,
-		"names": _names
+		"game_index": game_index,
+		"is_battle_only": is_battle_only,
+		"affecting_moves": affecting_moves,
+		"affecting_natures": affecting_natures,
+		"characteristics": characteristics,
+		"move_damage_class": move_damage_class,
+		"names": names
 	}
 
 

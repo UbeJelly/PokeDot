@@ -312,29 +312,29 @@ class_name Pokemon extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _base_experience: int = 0, _height: int = 0, _is_default: bool = true, _order: int = 0, _weight: int = 0, _abilities: Array = [], _forms: Array = [], _game_indices: Array = [], _held_items: Array = [], _location_area_encounters: String = "", _moves: Array = [], _species: Dictionary = {}, _sprites: Dictionary = {}, _cries: Dictionary = {}, _stats: Array = [], _types: Array = [], _past_types: Array = [], _past_abilities: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", base_experience: int = 0, height: int = 0, is_default: bool = true, order: int = 0, weight: int = 0, abilities: Array = [], forms: Array = [], game_indices: Array = [], held_items: Array = [], location_area_encounters: String = "", moves: Array = [], species: Dictionary = {}, sprites: Dictionary = {}, cries: Dictionary = {}, stats: Array = [], types: Array = [], past_types: Array = [], past_abilities: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"base_experience": _base_experience,
-		"height": _height,
-		"is_default": _is_default,
-		"order": _order,
-		"weight": _weight,
-		"abilities": _abilities,
-		"forms": _forms,
-		"game_indices": _game_indices,
-		"held_items": _held_items,
-		"location_area_encounters": _location_area_encounters,
-		"moves": _moves,
-		"species": _species,
-		"sprites": _sprites,
-		"cries": _cries,
-		"stats": _stats,
-		"types": _types,
-		"past_types": _past_types,
-		"past_abilities": _past_abilities
+		"base_experience": base_experience,
+		"height": height,
+		"is_default": is_default,
+		"order": order,
+		"weight": weight,
+		"abilities": abilities,
+		"forms": forms,
+		"game_indices": game_indices,
+		"held_items": held_items,
+		"location_area_encounters": location_area_encounters,
+		"moves": moves,
+		"species": species,
+		"sprites": sprites,
+		"cries": cries,
+		"stats": stats,
+		"types": types,
+		"past_types": past_types,
+		"past_abilities": past_abilities
 	}
 
 

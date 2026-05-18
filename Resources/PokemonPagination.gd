@@ -9,12 +9,12 @@ class_name PokemonPagination extends Node
 }
 
 
-func set_data(_count: int = 0, _next: String = "", _previous = null, _results: Array = []) -> void:
+func set_data(count: int = 0, next: String = "", previous = null, results: Array = []) -> void:
 	data = {
-		"count": _count,
-		"next": _next,
-		"previous": _previous,
-		"results": _results,
+		"count": count,
+		"next": next,
+		"previous": previous,
+		"results": results,
 	}
 
 

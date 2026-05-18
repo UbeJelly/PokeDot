@@ -45,17 +45,17 @@ class_name Pokedex extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _is_main_series: bool = true, _descriptions: Array = [], _names: Array = [], _pokemon_entries: Array = [], _region: Dictionary = {}, _version_groups: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", is_main_series: bool = true, descriptions: Array = [], names: Array = [], pokemon_entries: Array = [], region: Dictionary = {}, version_groups: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"is_main_series": _is_main_series,
-		"descriptions": _descriptions,
-		"names": _names,
-		"pokemon_entries": _pokemon_entries,
-		"region": _region,
-		"version_groups": _version_groups
+		"is_main_series": is_main_series,
+		"descriptions": descriptions,
+		"names": names,
+		"pokemon_entries": pokemon_entries,
+		"region": region,
+		"version_groups": version_groups
 	}
 
 

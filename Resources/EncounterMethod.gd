@@ -17,12 +17,12 @@ class_name EncounterMethod extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _order: int = 0, _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", order: int = 0, names: Array = []) -> void:
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"order": _order,
-		"names": _names
+		"order": order,
+		"names": names
 	}
 
 

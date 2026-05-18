@@ -36,13 +36,13 @@ class_name PokeAthlonStat extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _affecting_natures: Dictionary = {}, _names: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", affecting_natures: Dictionary = {}, names: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"affecting_natures": _affecting_natures,
-		"names": _names,
+		"affecting_natures": affecting_natures,
+		"names": names,
 	}
 
 

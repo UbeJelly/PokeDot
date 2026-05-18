@@ -105,35 +105,35 @@ class_name PokemonSpecies extends Node
 }
 
 
-func set_data(_id: int = 0, _name: String = "", _order: int = 0, _gender_rate: int = 0, _capture_rate: int = 0, _base_happiness: int = 0, _is_baby: bool = false, _is_legendary: bool = false, _is_mythical: bool = false, _hatch_counter: int = 0, _has_gender_differences: bool = false, _forms_switchable: bool = false, _growth_rate: Dictionary = {}, _pokedex_numbers: Array = [], _egg_groups: Array = [], _color: Dictionary = {}, _shape: Dictionary = {}, _evolves_from_species: Dictionary = {}, _evolution_chain: Dictionary = {}, _habitat = null, _generation: Dictionary = {}, _names: Array = [], _flavor_text_entries: Array = [], _form_descriptions: Array = [], _genera: Array = [], _varieties: Array = []) -> void:
+func set_data(id: int = 0, _name: String = "", order: int = 0, gender_rate: int = 0, capture_rate: int = 0, base_happiness: int = 0, is_baby: bool = false, is_legendary: bool = false, is_mythical: bool = false, hatch_counter: int = 0, has_gender_differences: bool = false, forms_switchable: bool = false, growth_rate: Dictionary = {}, pokedex_numbers: Array = [], egg_groups: Array = [], color: Dictionary = {}, shape: Dictionary = {}, evolves_from_species: Dictionary = {}, evolution_chain: Dictionary = {}, habitat = null, generation: Dictionary = {}, names: Array = [], flavor_text_entries: Array = [], form_descriptions: Array = [], genera: Array = [], varieties: Array = []) -> void:
 
 	data = {
-		"id": _id,
+		"id": id,
 		"name": _name,
-		"order": _order,
-		"gender_rate": _gender_rate,
-		"capture_rate": _capture_rate,
-		"base_happiness": _base_happiness,
-		"is_baby": _is_baby,
-		"is_legendary": _is_legendary,
-		"is_mythical": _is_mythical,
-		"hatch_counter": _hatch_counter,
-		"has_gender_differences": _has_gender_differences,
-		"forms_switchable": _forms_switchable,
-		"growth_rate": _growth_rate,
-		"pokedex_numbers": _pokedex_numbers,
-		"egg_groups": _egg_groups,
-		"color": _color,
-		"shape": _shape,
-		"evolves_from_species": _evolves_from_species,
-		"evolution_chain": _evolution_chain,
-		"habitat": _habitat,
-		"generation": _generation,
-		"names": _names,
-		"flavor_text_entries": _flavor_text_entries,
-		"form_descriptions": _form_descriptions,
-		"genera": _genera,
-		"varieties": _varieties
+		"order": order,
+		"gender_rate": gender_rate,
+		"capture_rate": capture_rate,
+		"base_happiness": base_happiness,
+		"is_baby": is_baby,
+		"is_legendary": is_legendary,
+		"is_mythical": is_mythical,
+		"hatch_counter": hatch_counter,
+		"has_gender_differences": has_gender_differences,
+		"forms_switchable": forms_switchable,
+		"growth_rate": growth_rate,
+		"pokedex_numbers": pokedex_numbers,
+		"egg_groups": egg_groups,
+		"color": color,
+		"shape": shape,
+		"evolves_from_species": evolves_from_species,
+		"evolution_chain": evolution_chain,
+		"habitat": habitat,
+		"generation": generation,
+		"names": names,
+		"flavor_text_entries": flavor_text_entries,
+		"form_descriptions": form_descriptions,
+		"genera": genera,
+		"varieties": varieties
 	}
 
 
