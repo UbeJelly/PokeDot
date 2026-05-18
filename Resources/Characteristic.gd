@@ -1,7 +1,7 @@
 class_name Characteristic extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"gene_modulo": 0,
 	"possible_values": [

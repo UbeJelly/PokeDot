@@ -1,7 +1,7 @@
 class_name ContestType extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"name": "",
 	"berry_flavor": {

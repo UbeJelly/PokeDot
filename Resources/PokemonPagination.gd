@@ -1,7 +1,7 @@
 class_name PokemonPagination extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"count": 0,
 	"next": "",
 	"previous": null,

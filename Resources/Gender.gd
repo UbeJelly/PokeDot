@@ -1,7 +1,7 @@
 class_name Gender extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"name": "",
 	"pokemon_species_details": [

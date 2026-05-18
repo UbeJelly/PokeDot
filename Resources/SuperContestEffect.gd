@@ -1,7 +1,7 @@
 class_name SuperContestEffect extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"appeal": 0,
 	"flavor_text_entries": [

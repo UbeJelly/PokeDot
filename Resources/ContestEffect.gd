@@ -1,7 +1,7 @@
 class_name ContestEffect extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"appeal": 0,
 	"jam": 0,

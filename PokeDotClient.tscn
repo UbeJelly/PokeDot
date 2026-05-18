@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene format=3 uid="uid://d2tisn24cs00r"]
 
-[ext_resource path="res://PokeDotClient.gd" type="Script" id=1]
+[ext_resource type="Script" uid="uid://bekjgbv3lbom1" path="res://PokeDotClient.gd" id="1"]
 
-[node name="PokeDotClient" type="HTTPRequest"]
-script = ExtResource( 1 )
+[node name="PokeDotClient" type="HTTPRequest" unique_id=405029991]
+script = ExtResource("1")
 
 [connection signal="request_completed" from="." to="." method="_on_request_completed"]

@@ -1,7 +1,7 @@
 class_name Pokemon extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"name": "",
 	"base_experience": 0,

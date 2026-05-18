@@ -1,7 +1,7 @@
 class_name PokemonForm extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"name": "",
 	"order": 0,

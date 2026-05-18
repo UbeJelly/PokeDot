@@ -1,6 +1,8 @@
-# PokeDot
-
-Simple [PokéApi](https://pokeapi.co/) wrapper via Godot.
+<p align="center">
+    <img src="PokeDot_title.png"><br>
+    A Pokemon API wrapper with Godot 4.
+    Uses <a href="https://pokeapi.co/" target="_blank">PokéApi</a> v2
+</p>
 
 # Usage
 ## Methods
@@ -108,3 +110,6 @@ HTTP response code: RESPONSE_OK
   ]
 }
 ```
+
+# License
+Uses MIT license. See [LICENSE.md](LICENSE.md)

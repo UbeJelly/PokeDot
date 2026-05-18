@@ -1,7 +1,7 @@
 class_name EggGroup extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"name": "",
 	"names": [

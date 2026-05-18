@@ -1,7 +1,7 @@
 class_name ItemCategory extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 0,
 	"name": "",
 	"items": [

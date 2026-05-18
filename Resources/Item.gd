@@ -1,7 +1,7 @@
 class_name Item extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"attributes": [
 		{
 			"name": "",

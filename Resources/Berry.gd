@@ -1,7 +1,7 @@
 class_name Berry extends Node
 
 
-export var data: Dictionary = {
+@export var data: Dictionary = {
 	"id": 1,
 	"name": "",
 	"growth_time": 0,
