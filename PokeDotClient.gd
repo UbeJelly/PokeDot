@@ -52,6 +52,11 @@ enum Get {
 	VERSION_GROUP
 }
 
+const NAME_ID_ERROR: String = "ERROR: %s, <name_or_id> must be an int or String type."
+
+var url: String = "https://pokeapi.co/api/v2/"
+var query: int = 0
+
 @onready var pokemon_pagination := PokemonPagination.new()
 @onready var ability := Ability.new()
 @onready var berry := Berry.new()
@@ -102,8 +107,6 @@ enum Get {
 @onready var version := Version.new()
 @onready var version_group := VersionGroup.new()
 
-var query: int = 0
-
 
 func _ready() -> void:
 	# Default endpoint & query method
@@ -111,13 +114,13 @@ func _ready() -> void:
 
 
 ## Main client that starts [param HTTPRequest] for any data. Returns 1 if OK
-## [param BASE_URL] is the main URL. Currently uses PokeAPI v2.
+## [param main_url] is the main URL. Currently uses PokeAPI v2.
 ## [param endpoint] is the API endpoint to request data from.
-func PokeDotClient(BASE_URL: String = "https://pokeapi.co/api/v2/", endpoint: String = "") -> int:
-	print("API URL: %s" % BASE_URL + endpoint)
+func PokeDotClient(main_url: String = url, endpoint: String = "") -> int:
+	print("API URL: %s" % main_url + endpoint)
 
-	if not BASE_URL == "" or not endpoint == "":
-		var _request_status: int = request(BASE_URL + endpoint, ["Accept: application/json"], HTTPClient.METHOD_GET)
+	if not main_url == "" or not endpoint == "":
+		var _request_status: int = request(main_url + endpoint, ["Accept: application/json"], HTTPClient.METHOD_GET)
 		print("PokeDotClient() status: OK\n")
 		return 1
 
@@ -131,7 +134,7 @@ func PokeDotClient(BASE_URL: String = "https://pokeapi.co/api/v2/", endpoint: St
 ## [param offset] is used to move between pages. 0 by default
 func get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offset: int = 0) -> Dictionary:
 	query = Get.POKEMON_PAGINATION
-	PokeDotClient("https://pokeapi.co/api/v2/", "%s/?limit=%s&offset=%s" % [endpoint, limit, offset])
+	PokeDotClient(url, "%s/?limit=%s&offset=%s" % [endpoint, limit, offset])
 	return pokemon_pagination.get_data()
 
 
@@ -140,12 +143,9 @@ func get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offse
 func get_ability(name_or_id) -> Dictionary:
 	query = Get.ABILITY
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "ability/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_ability(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "ability/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "ability/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_ability(<name_or_id>)")
 	return ability.get_data()
 
 
@@ -154,12 +154,9 @@ func get_ability(name_or_id) -> Dictionary:
 func get_berry(name_or_id) -> Dictionary:
 	query = Get.BERRY
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "berry/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "berry/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_berry(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "berry/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "berry/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_berry(<name_or_id>)")
 	return berry.get_data()
 
 
@@ -168,12 +165,9 @@ func get_berry(name_or_id) -> Dictionary:
 func get_berry_flavor(name_or_id) -> Dictionary:
 	query = Get.BERRY_FLAVOR
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "berry-flavor/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "berry-flavor/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_berry_flavor(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "berry-flavor/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "berry-flavor/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_berry_flavor(<name_or_id>)")
 	return berry_flavor.get_data()
 
 
@@ -182,12 +176,9 @@ func get_berry_flavor(name_or_id) -> Dictionary:
 func get_berry_firmness(name_or_id) -> Dictionary:
 	query = Get.BERRY_FIRMNESS
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "berry-firmness/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "berry-firmness/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_berry_firmness(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "berry-firmness/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "berry-firmness/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_berry_firmness(<name_or_id>)")
 	return berry_firmness.get_data()
 
 
@@ -195,7 +186,7 @@ func get_berry_firmness(name_or_id) -> Dictionary:
 ## [param id] is the id of a characteristic.
 func get_characteristic(id: int = 0) -> Dictionary:
 	query = Get.CHARACTERISTIC
-	PokeDotClient("https://pokeapi.co/api/v2/", "characteristic/%s/" % str(id))
+	PokeDotClient(url, "characteristic/%s/" % str(id))
 	return characteristic.get_data()
 
 
@@ -203,7 +194,7 @@ func get_characteristic(id: int = 0) -> Dictionary:
 ## [param id] is the id of a contest effect.
 func get_contest_effect(id: int = 0) -> Dictionary:
 	query = Get.CONTEST_EFFECT
-	PokeDotClient("https://pokeapi.co/api/v2/", "contest-effect/%s/" % str(id))
+	PokeDotClient(url, "contest-effect/%s/" % str(id))
 	return contest_effect.get_data()
 
 
@@ -212,12 +203,9 @@ func get_contest_effect(id: int = 0) -> Dictionary:
 func get_contest_type(name_or_id) -> Dictionary:
 	query = Get.CONTEST_TYPE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "contest-type/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "contest-type/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_contest_type(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "contest-type/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "contest-type/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_contest_type(<name_or_id>)")
 	return contest_type.get_data()
 
 
@@ -226,12 +214,9 @@ func get_contest_type(name_or_id) -> Dictionary:
 func get_egg_group(name_or_id) -> Dictionary:
 	query = Get.EGG_GROUP
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "egg-group/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "egg-group/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_egg_group(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "egg-group/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "egg-group/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_egg_group(<name_or_id>)")
 	return egg_group.get_data()
 
 
@@ -240,12 +225,9 @@ func get_egg_group(name_or_id) -> Dictionary:
 func get_encounter_condition(name_or_id) -> Dictionary:
 	query = Get.ENCOUNTER_CONDITION
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-condition/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-condition/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_encounter_condition(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "encounter-condition/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "encounter-condition/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_encounter_condition(<name_or_id>)")
 	return encounter_condition.get_data()
 
 
@@ -254,12 +236,9 @@ func get_encounter_condition(name_or_id) -> Dictionary:
 func get_encounter_condition_value(name_or_id) -> Dictionary:
 	query = Get.ENCOUNTER_CONDITION_VALUE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-condition-value/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-condition-value/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_encounter_condition_value(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "encounter-condition-value/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "encounter-condition-value/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_encounter_condition_value(<name_or_id>)")
 	return encounter_condition_value.get_data()
 
 
@@ -268,12 +247,9 @@ func get_encounter_condition_value(name_or_id) -> Dictionary:
 func get_encounter_method(name_or_id) -> Dictionary:
 	query = Get.ENCOUNTER_METHOD
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-method/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "encounter-method/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_encounter_method(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "encounter-method/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "encounter-method/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_encounter_method(<name_or_id>)")
 	return encounter_method.get_data()
 
 
@@ -281,7 +257,7 @@ func get_encounter_method(name_or_id) -> Dictionary:
 ## [param id] is the id of an evolution chain.
 func get_evolution_chain(id: int = 0) -> Dictionary:
 	query = Get.EVOLUTION_CHAIN
-	PokeDotClient("https://pokeapi.co/api/v2/", "evolution-chain/%s/" % str(id))
+	PokeDotClient(url, "evolution-chain/%s/" % str(id))
 	return evolution_chain.get_data()
 
 
@@ -290,12 +266,9 @@ func get_evolution_chain(id: int = 0) -> Dictionary:
 func get_evolution_trigger(name_or_id) -> Dictionary:
 	query = Get.EVOLUTION_TRIGGER
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "evolution-trigger/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "evolution-trigger/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_evolution_trigger(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "evolution-trigger/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "evolution-trigger/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_evolution_trigger(<name_or_id>)")
 	return evolution_trigger.get_data()
 
 
@@ -304,12 +277,9 @@ func get_evolution_trigger(name_or_id) -> Dictionary:
 func get_gender(name_or_id) -> Dictionary:
 	query = Get.GENDER
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "gender/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "gender/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_gender(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "gender/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "gender/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_gender(<name_or_id>)")
 	return gender.get_data()
 
 
@@ -318,12 +288,9 @@ func get_gender(name_or_id) -> Dictionary:
 func get_generation(name_or_id) -> Dictionary:
 	query = Get.GENERATION
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "generation/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "generation/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_generation(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "generation/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "generation/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_generation(<name_or_id>)")
 	return generation.get_data()
 
 
@@ -332,12 +299,9 @@ func get_generation(name_or_id) -> Dictionary:
 func get_growth_rate(name_or_id) -> Dictionary:
 	query = Get.GROWTH_RATE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "growth-rate/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "growth-rate/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_growth_rate(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "growth-rate/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "growth-rate/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_growth_rate(<name_or_id>)")
 	return growth_rate.get_data()
 
 
@@ -346,12 +310,9 @@ func get_growth_rate(name_or_id) -> Dictionary:
 func get_item(name_or_id) -> Dictionary:
 	query = Get.ITEM
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_item(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "item/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "item/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_item(<name_or_id>)")
 	return item.get_data()
 
 
@@ -360,12 +321,9 @@ func get_item(name_or_id) -> Dictionary:
 func get_item_attribute(name_or_id) -> Dictionary:
 	query = Get.ITEM_ATTRIBUTE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item-attribute/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item-attribute/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_item_attribute(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "item-attribute/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "item-attribute/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_item_attribute(<name_or_id>)")
 	return item_attribute.get_data()
 
 
@@ -374,12 +332,9 @@ func get_item_attribute(name_or_id) -> Dictionary:
 func get_item_category(name_or_id) -> Dictionary:
 	query = Get.ITEM_CATEGORY
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item-category/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item-category/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_item_category(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "item-category/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "item-category/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_item_category(<name_or_id>)")
 	return item_category.get_data()
 
 
@@ -388,12 +343,9 @@ func get_item_category(name_or_id) -> Dictionary:
 func get_item_fling_effect(name_or_id) -> Dictionary:
 	query = Get.ITEM_FLING_EFFECT
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item-fling-effect/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item-fling-effect/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_item_fling_effect(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "item-fling-effect/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "item-fling-effect/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_item_fling_effect(<name_or_id>)")
 	return item_fling_effect.get_data()
 
 
@@ -402,12 +354,9 @@ func get_item_fling_effect(name_or_id) -> Dictionary:
 func get_item_pocket(name_or_id) -> Dictionary:
 	query = Get.ITEM_POCKET
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item-pocket/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "item-pocket/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_item_pocket(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "item-pocket/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "item-pocket/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_item_pocket(<name_or_id>)")
 	return item_pocket.get_data()
 
 
@@ -416,12 +365,9 @@ func get_item_pocket(name_or_id) -> Dictionary:
 func get_language(name_or_id) -> Dictionary:
 	query = Get.LANGUAGE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "language/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "language/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_language(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "language/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "language/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_language(<name_or_id>)")
 	return language.get_data()
 
 
@@ -430,12 +376,9 @@ func get_language(name_or_id) -> Dictionary:
 func get_location(name_or_id) -> Dictionary:
 	query = Get.LOCATION
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "location/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "location/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_location(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "location/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "location/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_location(<name_or_id>)")
 	return location.get_data()
 
 
@@ -444,12 +387,9 @@ func get_location(name_or_id) -> Dictionary:
 func get_location_area(name_or_id) -> Dictionary:
 	query = Get.LOCATION_AREA
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "location-area/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "location-area/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_location_area(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "location-area/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "location-area/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_location_area(<name_or_id>)")
 	return location_area.get_data()
 
 
@@ -457,7 +397,7 @@ func get_location_area(name_or_id) -> Dictionary:
 ## [param id] is the id of a machine.
 func get_machine(id: int = 0) -> Dictionary:
 	query = Get.MACHINE
-	PokeDotClient("https://pokeapi.co/api/v2/", "machine/%s/" % str(id))
+	PokeDotClient(url, "machine/%s/" % str(id))
 	return machine.get_data()
 
 
@@ -466,12 +406,9 @@ func get_machine(id: int = 0) -> Dictionary:
 func get_move(name_or_id) -> Dictionary:
 	query = Get.MOVE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_move(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "move/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "move/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_move(<name_or_id>)")
 	return move.get_data()
 
 
@@ -480,12 +417,9 @@ func get_move(name_or_id) -> Dictionary:
 func get_move_ailment(name_or_id) -> Dictionary:
 	query = Get.MOVE_AILMENT
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-ailment/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-ailment/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_move_ailment(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "move-ailment/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "move-ailment/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_move_ailment(<name_or_id>)")
 	return move_ailment.get_data()
 
 
@@ -494,12 +428,9 @@ func get_move_ailment(name_or_id) -> Dictionary:
 func get_move_battle_style(name_or_id) -> Dictionary:
 	query = Get.MOVE_BATTLE_STYLE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-battle-style/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-battle-style/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_move_battle_style(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "move-battle-style/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "move-battle-style/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_move_battle_style(<name_or_id>)")
 	return move_battle_style.get_data()
 
 
@@ -508,12 +439,9 @@ func get_move_battle_style(name_or_id) -> Dictionary:
 func get_move_category(name_or_id) -> Dictionary:
 	query = Get.MOVE_CATEGORY
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-category/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-category/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_move_category(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "move-category/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "move-category/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_move_category(<name_or_id>)")
 	return move_category.get_data()
 
 
@@ -522,12 +450,9 @@ func get_move_category(name_or_id) -> Dictionary:
 func get_move_damage_class(name_or_id) -> Dictionary:
 	query = Get.MOVE_DAMAGE_CLASS
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-damage-class/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-damage-class/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_move_damage_class(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "move-damage-class/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "move-damage-class/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_move_damage_class(<name_or_id>)")
 	return move_damage_class.get_data()
 
 
@@ -536,12 +461,9 @@ func get_move_damage_class(name_or_id) -> Dictionary:
 func get_move_learn_method(name_or_id) -> Dictionary:
 	query = Get.MOVE_LEARN_METHOD
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-learn-method/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-learn-method/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_move_learn_method(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "move-learn-method/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "move-learn-method/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_move_learn_method(<name_or_id>)")
 	return move_learn_method.get_data()
 
 
@@ -550,12 +472,9 @@ func get_move_learn_method(name_or_id) -> Dictionary:
 func get_move_target(name_or_id) -> Dictionary:
 	query = Get.MOVE_TARGET
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-target/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "move-target/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_move_target(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "move-target/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "move-target/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_move_target(<name_or_id>)")
 	return move_target.get_data()
 
 
@@ -564,12 +483,9 @@ func get_move_target(name_or_id) -> Dictionary:
 func get_nature(name_or_id) -> Dictionary:
 	query = Get.NATURE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "nature/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "nature/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_nature(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "nature/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "nature/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_nature(<name_or_id>)")
 	return nature.get_data()
 
 
@@ -578,12 +494,9 @@ func get_nature(name_or_id) -> Dictionary:
 func get_pal_park_area(name_or_id) -> Dictionary:
 	query = Get.PAL_PARK_AREA
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pal-park-area/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pal-park-area/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pal_park_area(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pal-park-area/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pal-park-area/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pal_park_area(<name_or_id>)")
 	return pal_park_area.get_data()
 
 
@@ -592,12 +505,9 @@ func get_pal_park_area(name_or_id) -> Dictionary:
 func get_pokeathlon_stat(name_or_id) -> Dictionary:
 	query = Get.POKEATHLON_STAT
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokeathlon-stat/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokeathlon-stat/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pokeathlon_stat(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pokeathlon-stat/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pokeathlon-stat/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pokeathlon_stat(<name_or_id>)")
 	return pokeathlon_stat.get_data()
 
 
@@ -606,12 +516,9 @@ func get_pokeathlon_stat(name_or_id) -> Dictionary:
 func get_pokedex(name_or_id) -> Dictionary:
 	query = Get.POKEDEX
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokedex/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokedex/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pokedex(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pokedex/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pokedex/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pokedex(<name_or_id>)")
 	return pokeathlon_stat.get_data()
 
 
@@ -620,12 +527,9 @@ func get_pokedex(name_or_id) -> Dictionary:
 func get_pokemon(name_or_id) -> Dictionary:
 	query = Get.POKEMON
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pokemon(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pokemon/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pokemon/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pokemon(<name_or_id>)")
 	return pokemon.get_data()
 
 
@@ -634,12 +538,9 @@ func get_pokemon(name_or_id) -> Dictionary:
 func get_pokemon_color(name_or_id) -> Dictionary:
 	query = Get.POKEMON_COLOR
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-color/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-color/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pokemon_color(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pokemon-color/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pokemon-color/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pokemon_color(<name_or_id>)")
 	return pokemon_color.get_data()
 
 
@@ -648,12 +549,9 @@ func get_pokemon_color(name_or_id) -> Dictionary:
 func get_pokemon_form(name_or_id) -> Dictionary:
 	query = Get.POKEMON_FORM
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-form/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-form/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pokemon_form(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pokemon-form/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pokemon-form/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pokemon_form(<name_or_id>)")
 	return pokemon_form.get_data()
 
 
@@ -662,12 +560,9 @@ func get_pokemon_form(name_or_id) -> Dictionary:
 func get_pokemon_habitat(name_or_id) -> Dictionary:
 	query = Get.POKEMON_HABITAT
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-habitat/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-habitat/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pokemon_habitat(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pokemon-habitat/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pokemon-habitat/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pokemon_habitat(<name_or_id>)")
 	return pokemon_habitat.get_data()
 
 
@@ -676,12 +571,9 @@ func get_pokemon_habitat(name_or_id) -> Dictionary:
 func get_pokemon_shape(name_or_id) -> Dictionary:
 	query = Get.POKEMON_SHAPE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-shape/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-shape/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pokemon_shape(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pokemon-shape/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pokemon-shape/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pokemon_shape(<name_or_id>)")
 	return pokemon_shape.get_data()
 
 
@@ -690,12 +582,9 @@ func get_pokemon_shape(name_or_id) -> Dictionary:
 func get_pokemon_species(name_or_id) -> Dictionary:
 	query = Get.POKEMON_SPECIES
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-species/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "pokemon-species/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_pokemon_species(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "pokemon-species/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "pokemon-species/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_pokemon_species(<name_or_id>)")
 	return pokemon_species.get_data()
 
 
@@ -704,12 +593,9 @@ func get_pokemon_species(name_or_id) -> Dictionary:
 func get_region(name_or_id) -> Dictionary:
 	query = Get.REGION
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "region/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "region/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_region(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "region/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "region/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_region(<name_or_id>)")
 	return region.get_data()
 
 
@@ -718,12 +604,9 @@ func get_region(name_or_id) -> Dictionary:
 func get_stat(name_or_id) -> Dictionary:
 	query = Get.STAT
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "stat/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "stat/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_stat(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "stat/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "stat/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_stat(<name_or_id>)")
 	return stat.get_data()
 
 
@@ -732,12 +615,9 @@ func get_stat(name_or_id) -> Dictionary:
 func get_super_contest_effect(name_or_id) -> Dictionary:
 	query = Get.SUPER_CONTEST_EFFECT
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "super-contest-effect/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "super-contest-effect/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_super_contest_effect(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "super-contest-effect/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "super-contest-effect/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_super_contest_effect(<name_or_id>)")
 	return super_contest_effect.get_data()
 
 
@@ -746,12 +626,9 @@ func get_super_contest_effect(name_or_id) -> Dictionary:
 func get_type(name_or_id) -> Dictionary:
 	query = Get.TYPE
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "type/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "type/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_type(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "type/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "type/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_type(<name_or_id>)")
 	return type.get_data()
 
 
@@ -760,12 +637,9 @@ func get_type(name_or_id) -> Dictionary:
 func get_version(name_or_id) -> Dictionary:
 	query = Get.VERSION
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "version/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "version/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_version(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "version/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "version/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_version(<name_or_id>)")
 	return version.get_data()
 
 
@@ -774,18 +648,15 @@ func get_version(name_or_id) -> Dictionary:
 func get_version_group(name_or_id) -> Dictionary:
 	query = Get.VERSION_GROUP
 	match typeof(name_or_id):
-		TYPE_STRING:
-			PokeDotClient("https://pokeapi.co/api/v2/", "version-group/%s/" % name_or_id)
-		TYPE_INT:
-			PokeDotClient("https://pokeapi.co/api/v2/", "version-group/%s/" % str(name_or_id))
-		_:
-			printerr("ERROR: get_version_group(<name_or_id>), <name_or_id> must be an int or String type.")
+		TYPE_STRING: PokeDotClient(url, "version-group/%s/" % name_or_id)
+		TYPE_INT: PokeDotClient(url, "version-group/%s/" % str(name_or_id))
+		_: printerr(NAME_ID_ERROR % "get_version_group(<name_or_id>)")
 	return version_group.get_data()
 
 
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
-	print("HTTP request code: %s" % _get_result(result))
+	print("HTTP result code: %s" % _get_result(result))
 	print("HTTP response code: %s\n" % _get_response(response_code))
 	print("%s\n" % JSON.stringify(headers, "  "))
 	#print(JSON.print(data, "  "))
@@ -1386,88 +1257,89 @@ func _parse_JSON(body: PackedByteArray) -> Dictionary:
 ## Returns a readable result code in.
 ## [param id] is the result code/id.
 func _get_result(id: int) -> String:
-	var codes: Dictionary = {
-		0: "RESULT_SUCCESS",
-		1: "RESULT_CHUNKED_BODY_SIZE_MISMATCH",
-		2: "RESULT_CANT_CONNECT",
-		3: "RESULT_CANT_RESOLVE",
-		4: "RESULT_CONNECTION_ERROR",
-		5: "RESULT_SSL_HANDSHAKE_ERROR",
-		6: "RESULT_NO_RESPONSE",
-		7: "RESULT_BODY_SIZE_LIMIT_EXCEEDED",
-		8: "RESULT_REQUEST_FAILED",
-		9: "RESULT_DOWNLOAD_FILE_CANT_OPEN",
-		10: "RESULT_DOWNLOAD_FILE_WRITE_ERROR",
-		11: "RESULT_REDIRECT_LIMIT_REACHED",
-		12: "RESULT_TIMEOUT",
-	}
-	return codes.get(id)
+	var status: String = ""
+	match id:
+		0: status = "RESULT_SUCCESS"
+		1: status = "RESULT_CHUNKED_BODY_SIZE_MISMATCH"
+		2: status = "RESULT_CANT_CONNECT"
+		3: status = "RESULT_CANT_RESOLVE"
+		4: status = "RESULT_CONNECTION_ERROR"
+		5: status = "RESULT_TLS_HANDSHAKE_ERROR"
+		6: status = "RESULT_NO_RESPONSE"
+		7: status = "RESULT_BODY_SIZE_LIMIT_EXCEEDED"
+		8: status = "RESULT_BODY_DECOMPRESS_FAILED"
+		9: status = "RESULT_REQUEST_FAILED"
+		10: status = "RESULT_DOWNLOAD_FILE_CANT_OPEN"
+		11: status = "RESULT_DOWNLOAD_FILE_WRITE_ERROR"
+		12: status = "RESULT_REDIRECT_LIMIT_REACHED"
+		13: status = "RESULT_TIMEOUT"
+	return status
 
 
 ## Returns a readable response code.
 ## [param id] is the response code/id.
 func _get_response(id: int) -> String:
-	var codes: Dictionary = {
-		100: "RESPONSE_CONTINUE",
-		101: "RESPONSE_SWITCHING_PROTOCOLS",
-		102: "RESPONSE_PROCESSING",
-		200: "RESPONSE_OK",
-		201: "RESPONSE_CREATED",
-		202: "RESPONSE_ACCEPTED",
-		203: "RESPONSE_NON_AUTHORITATIVE_INFORMATION",
-		204: "RESPONSE_NO_CONTENT",
-		205: "RESPONSE_RESET_CONTENT",
-		206: "RESPONSE_PARTIAL_CONTENT",
-		207: "RESPONSE_MULTI_STATUS",
-		208: "RESPONSE_ALREADY_REPORTED",
-		226: "RESPONSE_IM_USED",
-		300: "RESPONSE_MULTIPLE_CHOICES",
-		301: "RESPONSE_MOVED_PERMANENTLY",
-		302: "RESPONSE_FOUND",
-		303: "RESPONSE_SEE_OTHER",
-		304: "RESPONSE_NOT_MODIFIED",
-		305: "RESPONSE_USE_PROXY",
-		306: "RESPONSE_SWITCH_PROXY",
-		307: "RESPONSE_TEMPORARY_REDIRECT",
-		308: "RESPONSE_PERMANENT_REDIRECT",
-		400: "RESPONSE_BAD_REQUEST",
-		401: "RESPONSE_UNAUTHORIZED",
-		402: "RESPONSE_PAYMENT_REQUIRED",
-		403: "RESPONSE_FORBIDDEN",
-		404: "RESPONSE_NOT_FOUND",
-		405: "RESPONSE_METHOD_NOT_ALLOWED",
-		406: "RESPONSE_NOT_ACCEPTABLE",
-		407: "RESPONSE_PROXY_AUTHENTICATION_REQUIRED",
-		408: "RESPONSE_REQUEST_TIMEOUT",
-		409: "RESPONSE_CONFLICT",
-		410: "RESPONSE_GONE",
-		411: "RESPONSE_LENGTH_REQUIRED",
-		412: "RESPONSE_PRECONDITION_FAILED",
-		413: "RESPONSE_REQUEST_ENTITY_TOO_LARGE",
-		414: "RESPONSE_REQUEST_URI_TOO_LONG",
-		415: "RESPONSE_UNSUPPORTED_MEDIA_TYPE",
-		416: "RESPONSE_REQUESTED_RANGE_NOT_SATISFIABLE",
-		417: "RESPONSE_EXPECTATION_FAILED",
-		418: "RESPONSE_IM_A_TEAPOT",
-		421: "RESPONSE_MISDIRECTED_REQUEST",
-		422: "RESPONSE_UNPROCESSABLE_ENTITY",
-		423: "RESPONSE_LOCKED",
-		424: "RESPONSE_FAILED_DEPENDENCY",
-		426: "RESPONSE_UPGRADE_REQUIRED",
-		428: "RESPONSE_PRECONDITION_REQUIRED",
-		429: "RESPONSE_TOO_MANY_REQUESTS",
-		431: "RESPONSE_REQUEST_HEADER_FIELDS_TOO_LARGE",
-		451: "RESPONSE_UNAVAILABLE_FOR_LEGAL_REASONS",
-		500: "RESPONSE_INTERNAL_SERVER_ERROR",
-		501: "RESPONSE_NOT_IMPLEMENTED",
-		502: "RESPONSE_BAD_GATEWAY",
-		503: "RESPONSE_SERVICE_UNAVAILABLE",
-		504: "RESPONSE_GATEWAY_TIMEOUT",
-		505: "RESPONSE_HTTP_VERSION_NOT_SUPPORTED",
-		506: "RESPONSE_VARIANT_ALSO_NEGOTIATES",
-		507: "RESPONSE_INSUFFICIENT_STORAGE",
-		508: "RESPONSE_LOOP_DETECTED",
-		510: "RESPONSE_NOT_EXTENDED",
-		511: "RESPONSE_NETWORK_AUTH_REQUIRED",
-	}
-	return codes.get(id)
+	var status: String = ""
+	match id:
+		100: status = "RESPONSE_CONTINUE"
+		101: status = "RESPONSE_SWITCHING_PROTOCOLS"
+		102: status = "RESPONSE_PROCESSING"
+		200: status = "RESPONSE_OK"
+		201: status = "RESPONSE_CREATED"
+		202: status = "RESPONSE_ACCEPTED"
+		203: status = "RESPONSE_NON_AUTHORITATIVE_INFORMATION"
+		204: status = "RESPONSE_NO_CONTENT"
+		205: status = "RESPONSE_RESET_CONTENT"
+		206: status = "RESPONSE_PARTIAL_CONTENT"
+		207: status = "RESPONSE_MULTI_STATUS"
+		208: status = "RESPONSE_ALREADY_REPORTED"
+		226: status = "RESPONSE_IM_USED"
+		300: status = "RESPONSE_MULTIPLE_CHOICES"
+		301: status = "RESPONSE_MOVED_PERMANENTLY"
+		302: status = "RESPONSE_FOUND"
+		303: status = "RESPONSE_SEE_OTHER"
+		304: status = "RESPONSE_NOT_MODIFIED"
+		305: status = "RESPONSE_USE_PROXY"
+		306: status = "RESPONSE_SWITCH_PROXY"
+		307: status = "RESPONSE_TEMPORARY_REDIRECT"
+		308: status = "RESPONSE_PERMANENT_REDIRECT"
+		400: status = "RESPONSE_BAD_REQUEST"
+		401: status = "RESPONSE_UNAUTHORIZED"
+		402: status = "RESPONSE_PAYMENT_REQUIRED"
+		403: status = "RESPONSE_FORBIDDEN"
+		404: status = "RESPONSE_NOT_FOUND"
+		405: status = "RESPONSE_METHOD_NOT_ALLOWED"
+		406: status = "RESPONSE_NOT_ACCEPTABLE"
+		407: status = "RESPONSE_PROXY_AUTHENTICATION_REQUIRED"
+		408: status = "RESPONSE_REQUEST_TIMEOUT"
+		409: status = "RESPONSE_CONFLICT"
+		410: status = "RESPONSE_GONE"
+		411: status = "RESPONSE_LENGTH_REQUIRED"
+		412: status = "RESPONSE_PRECONDITION_FAILED"
+		413: status = "RESPONSE_REQUEST_ENTITY_TOO_LARGE"
+		414: status = "RESPONSE_REQUEST_URI_TOO_LONG"
+		415: status = "RESPONSE_UNSUPPORTED_MEDIA_TYPE"
+		416: status = "RESPONSE_REQUESTED_RANGE_NOT_SATISFIABLE"
+		417: status = "RESPONSE_EXPECTATION_FAILED"
+		418: status = "RESPONSE_IM_A_TEAPOT"
+		421: status = "RESPONSE_MISDIRECTED_REQUEST"
+		422: status = "RESPONSE_UNPROCESSABLE_ENTITY"
+		423: status = "RESPONSE_LOCKED"
+		424: status = "RESPONSE_FAILED_DEPENDENCY"
+		426: status = "RESPONSE_UPGRADE_REQUIRED"
+		428: status = "RESPONSE_PRECONDITION_REQUIRED"
+		429: status = "RESPONSE_TOO_MANY_REQUESTS"
+		431: status = "RESPONSE_REQUEST_HEADER_FIELDS_TOO_LARGE"
+		451: status = "RESPONSE_UNAVAILABLE_FOR_LEGAL_REASONS"
+		500: status = "RESPONSE_INTERNAL_SERVER_ERROR"
+		501: status = "RESPONSE_NOT_IMPLEMENTED"
+		502: status = "RESPONSE_BAD_GATEWAY"
+		503: status = "RESPONSE_SERVICE_UNAVAILABLE"
+		504: status = "RESPONSE_GATEWAY_TIMEOUT"
+		505: status = "RESPONSE_HTTP_VERSION_NOT_SUPPORTED"
+		506: status = "RESPONSE_VARIANT_ALSO_NEGOTIATES"
+		507: status = "RESPONSE_INSUFFICIENT_STORAGE"
+		508: status = "RESPONSE_LOOP_DETECTED"
+		510: status = "RESPONSE_NOT_EXTENDED"
+		511: status = "RESPONSE_NETWORK_AUTH_REQUIRED"
+	return status
