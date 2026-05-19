@@ -5,24 +5,27 @@
 </p>
 
 # Usage
+Here are some details how you can use this wrapper.
+
 ## Example
 1. Just copy the `Resources` folder, `PokeDotClient.gd`, and `PokeDotClient.tscn` into the new Godot project directory.
-2. The `request_completed` signal must be emitted first in order to get the data, but here getting the data returns empty values as it is called in ready() and as such not completed yet.
+2. The `request_completed` signal must be emitted first in order to get the data, but here getting the data returns empty values as it is called in `_ready()` and as such not completed yet.
 So in order to get the values after completing the request:  
 ![test screenshot](https://github.com/user-attachments/assets/6daad32b-2159-4ff3-b74c-ddb18fc681c3)  
 
-1. Call the method first e.g. `get_ability(1)`
-2. Wait till it's request is completed - `await pokeapi.request_completed`
-3. Then you can access its (`PokeDotClient`) child node `Ability.gd`, and call its `get_data()`: `pokeapi.ability.get_data()`
-4. The values can now be used as needed:  
+- Call the method first e.g. `get_ability(1)`
+- Wait till it's request is completed - `await pokeapi.request_completed`
+- Then you can access its (`PokeDotClient`) child node `Ability.gd`, and call its `get_data()`: `pokeapi.ability.get_data()`
+- The values can now be used as needed:  
 ![output screenshot](https://github.com/user-attachments/assets/81261ecc-c350-485e-8e71-9268d50d68a2)
 
 > [!NOTE]  
-> The actual [PokeDot](https://github.com/UbeJelly/PokeDot) repo has its `PokeDotClient.gd` call `get_pokemon_pagination()` when `ready()`, so if not needed (most likely) disable or remove it first. It's there by default so anyone could test it right away if it works.
+> This repo has its `PokeDotClient.gd` call `get_pokemon_pagination()` when `_ready()` by default, so if not needed (most likely) disable or remove it first. It's there by default so anyone could also test it right away if it works.
 
 For a quick test you can also check out [PokeDotTest](https://github.com/UbeJelly/PokeDotTest).
 
 ## Methods
+These functions don't return the data immediately when called. They only request it, and the actual data itself can only be accessed when the request is complete.
 
 - `PokeDotClient(BASE_URL, endpoint)` - main function that various methods uses. It returns 0 or 1 depending its error. It has `BASE_URL` and `endpoint` arguments.
   - `BASE_URL` - `https://pokeapi.co/api/v2/` by default.
