@@ -18,6 +18,11 @@ config/custom_user_dir_name="PokeDotClient"
 config/features=PackedStringArray("4.6")
 config/icon="res://icon.png"
 
+[display]
+
+window/size/viewport_width=240
+window/size/viewport_height=160
+
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true

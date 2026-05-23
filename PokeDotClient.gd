@@ -54,6 +54,14 @@ enum Get {
 
 const NAME_ID_ERROR: String = "ERROR: %s, <name_or_id> must be an int or String type."
 
+## INFO: Toggle the visibility of callback status or requested data on terminal.
+@export_category("Console Texts")
+@export var print_stat: bool = true			## Show or hide the status of functions.
+@export var print_data: bool = true			## Show or hide the requested data.
+@export var print_result: bool = true		## Show or hide the result of requests.
+@export var print_response: bool = true		## Show or hide the response of requests.
+@export var print_headers: bool = false		## Show or hide the headers of requests.
+
 var url: String = "https://pokeapi.co/api/v2/"
 var query: int = 0
 
@@ -108,1081 +116,907 @@ var query: int = 0
 @onready var version_group := VersionGroup.new()
 
 
-func _ready() -> void:
-	# Default endpoint & query method
-	get_pokemon_pagination("pokemon", 20, 0)
-
-
-## Main client that starts [param HTTPRequest] for any data. Returns 1 if OK
+## Main client that starts [param HTTPRequest] for any data. Returns a request error.
 ## [param main_url] is the main URL. Currently uses PokeAPI v2.
 ## [param endpoint] is the API endpoint to request data from.
-func PokeDotClient(main_url: String = url, endpoint: String = "") -> int:
-	print("API URL: %s" % main_url + endpoint)
+## [param method] is the name of the method, e.g. 'get_ability', to return their request status.
+func PokeDotClient(main_url: String = url, endpoint: String = "", method: String = "") -> void:
+	print("Request endpoint: %s" % main_url + endpoint + "\n")
 
 	if not main_url == "" or not endpoint == "":
-		var _request_status: int = request(main_url + endpoint, ["Accept: application/json"], HTTPClient.METHOD_GET)
-		print("PokeDotClient() status: OK\n")
-		return 1
+		var error: int = 0
+		error = request(main_url + endpoint, ["Accept: application/json"], HTTPClient.METHOD_GET)
+		if error == OK: print("✓ %s() run successfully." % method)
+		else: print("❌ %s() failed." % method)
+	else:
+		print("❌ PokeDotClient() failed. The main_url or endpoint cannot be empty.")
 
-	print("PokeDotClient() status: ERROR\n")
-	return 0
 
-
-## Returns a list of Pokemons based on a page and its position.
+## Retrieves a list of Pokemons on a page and its position and stores it to PokemonPagination.
 ## [param endpoint] is the API endpoint to request data from. "pokemon" by default
 ## [param limit] is the number of Pokemons in a page. 20 items by default
 ## [param offset] is used to move between pages. 0 by default
 func get_pokemon_pagination(endpoint: String = "pokemon", limit: int = 20, offset: int = 0) -> void:
 	query = Get.POKEMON_PAGINATION
-	PokeDotClient(url, "%s/?limit=%s&offset=%s" % [endpoint, limit, offset])
+	PokeDotClient(url, "%s/?limit=%s&offset=%s" % [endpoint, limit, offset], "get_pokemon_pagination")
 
 
-## Returns an ability information.
+## Retrieves an ability data and stores it to Ability.
 ## [param name_or_id] is the name or id of an ability.
 func get_ability(name_or_id) -> void:
 	query = Get.ABILITY
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "ability/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "ability/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_ability(<name_or_id>)")
+	PokeDotClient(url, "ability/%s/" % str(name_or_id), "get_ability")
 
 
-## Returns a berry information.
+## Retrieves a berry data and stores it to Berry.
 ## [param name_or_id] is the name or id of a berry.
 func get_berry(name_or_id) -> void:
 	query = Get.BERRY
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "berry/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "berry/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_berry(<name_or_id>)")
+	PokeDotClient(url, "berry/%s/" % str(name_or_id), "get_berry")
 
 
-## Returns a berry flavor information.
+## Retrieves a berry flavor data and stores it to BerryFlavor.
 ## [param name_or_id] is the name or id of a berry flavor.
 func get_berry_flavor(name_or_id) -> void:
 	query = Get.BERRY_FLAVOR
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "berry-flavor/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "berry-flavor/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_berry_flavor(<name_or_id>)")
+	PokeDotClient(url, "berry-flavor/%s/" % str(name_or_id), "get_berry_flavor")
 
 
-## Returns a berry firmness information.
+## Retrieves a berry firmness data and stores it to BerryFirmness.
 ## [param name_or_id] is the name or id of a berry firmness.
 func get_berry_firmness(name_or_id) -> void:
 	query = Get.BERRY_FIRMNESS
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "berry-firmness/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "berry-firmness/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_berry_firmness(<name_or_id>)")
+	PokeDotClient(url, "berry-firmness/%s/" % str(name_or_id), "get_berry_firmness")
 
 
-## Returns a Pokemon's highest stat.
+## Retrieves the Pokemon's highest stat and stores it to Characteristic.
 ## [param id] is the id of a characteristic.
 func get_characteristic(id: int = 0) -> void:
 	query = Get.CHARACTERISTIC
-	PokeDotClient(url, "characteristic/%s/" % str(id))
+	PokeDotClient(url, "characteristic/%s/" % str(id), "get_characteristic")
 
 
-## Returns a Pokemon moves' effects in contests.
+## Retrieves the Pokemon moves' effects in contests and stores them to ContestEffect.
 ## [param id] is the id of a contest effect.
 func get_contest_effect(id: int = 0) -> void:
 	query = Get.CONTEST_EFFECT
-	PokeDotClient(url, "contest-effect/%s/" % str(id))
+	PokeDotClient(url, "contest-effect/%s/" % str(id), "get_contest_effect")
 
 
-## Returns what categories judges used to weigh a Pokemon's condition in contests.
+## Retrieves the categories that judges use to weigh a Pokemon's condition in contests, and stores them to ContestType.
 ## [param name_or_id] is the name or id of a contest type.
 func get_contest_type(name_or_id) -> void:
 	query = Get.CONTEST_TYPE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "contest-type/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "contest-type/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_contest_type(<name_or_id>)")
+	PokeDotClient(url, "contest-type/%s/" % str(name_or_id), "get_contest_type")
 
 
-## Returns the categories which determine which Pokemon are able to interbreed.
+## Retrieves the categories that determine which Pokemon are able to interbreed, and stores them to EggGroup.
 ## [param name_or_id] is the name or id of an egg group.
 func get_egg_group(name_or_id) -> void:
 	query = Get.EGG_GROUP
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "egg-group/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "egg-group/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_egg_group(<name_or_id>)")
+	PokeDotClient(url, "egg-group/%s/" % str(name_or_id), "get_egg_group")
 
 
-## Returns the conditions which affect what Pokemon might appear in the wild, e.g., day or night.
+## Retrieves the conditions that affect which Pokemon might appear in the wild, e.g., day or night, and stores them to EncounterCondition.
 ## [param name_or_id] is the name or id of an encounter condition.
 func get_encounter_condition(name_or_id) -> void:
 	query = Get.ENCOUNTER_CONDITION
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "encounter-condition/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "encounter-condition/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_encounter_condition(<name_or_id>)")
+	PokeDotClient(url, "encounter-condition/%s/" % str(name_or_id), "get_encounter_condition")
 
 
-## Returns the various states that an encounter condition can have, e.g., time of day can be either day or night.
+## Retrieves the various states that an encounter condition can have, e.g., time of day can be either day or night, and stores them to EncounterConditionValue.
 ## [param name_or_id] is the name or id of an encounter condition value.
 func get_encounter_condition_value(name_or_id) -> void:
 	query = Get.ENCOUNTER_CONDITION_VALUE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "encounter-condition-value/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "encounter-condition-value/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_encounter_condition_value(<name_or_id>)")
+	PokeDotClient(url, "encounter-condition-value/%s/" % str(name_or_id), "get_encounter_condition_value")
 
 
-## Returns the methods by which the player might can encounter Pokemon in the wild, e.g., walking in tall grass.
+## Retrieves the methods by which the player might can encounter Pokemon in the wild, e.g., walking in tall grass, and stores them to EncounterMethod.
 ## [param name_or_id] is the name or id of an encounter method.
 func get_encounter_method(name_or_id) -> void:
 	query = Get.ENCOUNTER_METHOD
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "encounter-method/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "encounter-method/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_encounter_method(<name_or_id>)")
+	PokeDotClient(url, "encounter-method/%s/" % str(name_or_id), "get_encounter_method")
 
 
-## Returns the Pokemon's family tree.
+## Retrieves the Pokemon's family tree and stores it to EvolutionChain.
 ## [param id] is the id of an evolution chain.
 func get_evolution_chain(id: int = 0) -> void:
 	query = Get.EVOLUTION_CHAIN
-	PokeDotClient(url, "evolution-chain/%s/" % str(id))
+	PokeDotClient(url, "evolution-chain/%s/" % str(id), "get_evolution_chain")
 
 
-## Returns the events and conditions that cause a Pokemon to evolve.
+## Retrieves the events and conditions that cause a Pokemon to evolve and stores them to EvolutionTrigger.
 ## [param name_or_id] is the name or id of an evolution trigger.
 func get_evolution_trigger(name_or_id) -> void:
 	query = Get.EVOLUTION_TRIGGER
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "evolution-trigger/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "evolution-trigger/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_evolution_trigger(<name_or_id>)")
+	PokeDotClient(url, "evolution-trigger/%s/" % str(name_or_id), "get_evolution_trigger")
 
 
-## Returns the details about gender i.e. species, rate, and evolution requirements.
+## Retrieves the details about gender i.e. species, rate, and evolution requirements, and stores them to Gender.
 ## [param name_or_id] is the name or id of a gender.
 func get_gender(name_or_id) -> void:
 	query = Get.GENDER
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "gender/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "gender/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_gender(<name_or_id>)")
+	PokeDotClient(url, "gender/%s/" % str(name_or_id), "get_gender")
 
 
-## Returns the details about a grouping of the Pokemon games that are separated based on the Pokemon they include.
+## Retrieves the details about a grouping of the Pokemon games that are separated based on the Pokemon they include and stores them to Generation.
 ## [param name_or_id] is the name or id of a generation.
 func get_generation(name_or_id) -> void:
 	query = Get.GENERATION
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "generation/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "generation/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_generation(<name_or_id>)")
+	PokeDotClient(url, "generation/%s/" % str(name_or_id), "get_generation")
 
 
-## Returns the speed in which a Pokemon gain levels through experience.
+## Retrieves the speed in which a Pokemon gain levels through experience and stores it to GrowthRate.
 ## [param name_or_id] is the name or id of growth rate.
 func get_growth_rate(name_or_id) -> void:
 	query = Get.GROWTH_RATE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "growth-rate/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "growth-rate/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_growth_rate(<name_or_id>)")
+	PokeDotClient(url, "growth-rate/%s/" % str(name_or_id), "get_growth_rate")
 
 
-## Returns an object in the games which the player can pick up, keep in their bag, and use in some manner.
+## Retrieves an object in the games which the player can pick up, keep in their bag, and use in some manner, and stores it to Item.
 ## [param name_or_id] is the name or id of an item.
 func get_item(name_or_id) -> void:
 	query = Get.ITEM
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "item/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "item/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_item(<name_or_id>)")
+	PokeDotClient(url, "item/%s/" % str(name_or_id), "get_item")
 
 
-## Returns the definition of particular aspects of items, e.g. "usable in battle" or "consumable".
+## Retrieves the definition of particular aspects of items, e.g. "usable in battle" or "consumable", and stores it to ItemAttribute.
 ## [param name_or_id] is the name or id of an item attribute.
 func get_item_attribute(name_or_id) -> void:
 	query = Get.ITEM_ATTRIBUTE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "item-attribute/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "item-attribute/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_item_attribute(<name_or_id>)")
+	PokeDotClient(url, "item-attribute/%s/" % str(name_or_id), "get_item_attribute")
 
 
-## Returns the category that determine where items will be placed in the players bag.
+## Retrieves the category that determine where items will be placed in the players bag, and stores it to ItemCategory.
 ## [param name_or_id] is the name or id of an item category.
 func get_item_category(name_or_id) -> void:
 	query = Get.ITEM_CATEGORY
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "item-category/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "item-category/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_item_category(<name_or_id>)")
+	PokeDotClient(url, "item-category/%s/" % str(name_or_id), "get_item_category")
 
 
-## Returns the various effects of the move "Fling" when used with different items.
+## Retrieves the various effects of the move "Fling" when used with different items, and stores them to ItemFlingEffect.
 ## [param name_or_id] is the name or id of an item fling effect.
 func get_item_fling_effect(name_or_id) -> void:
 	query = Get.ITEM_FLING_EFFECT
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "item-fling-effect/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "item-fling-effect/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_item_fling_effect(<name_or_id>)")
+	PokeDotClient(url, "item-fling-effect/%s/" % str(name_or_id), "get_item_fling_effect")
 
 
-## Returns the bag pocket used for storing items by category.
+## Retrieves the bag pocket used for storing items by category and stores it ItemPocket.
 ## [param name_or_id] is the name or id of an item pocket.
 func get_item_pocket(name_or_id) -> void:
 	query = Get.ITEM_POCKET
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "item-pocket/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "item-pocket/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_item_pocket(<name_or_id>)")
+	PokeDotClient(url, "item-pocket/%s/" % str(name_or_id), "get_item_pocket")
 
 
-## Returns the languages for translations of API resource information.
+## Retrieves the languages for translations of API resource information, and stores them to Language.
 ## [param name_or_id] is the name or id of a language.
 func get_language(name_or_id) -> void:
 	query = Get.LANGUAGE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "language/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "language/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_language(<name_or_id>)")
+	PokeDotClient(url, "language/%s/" % str(name_or_id), "get_language")
 
 
-## Returns the locations that can be visited within the games. They make up sizable portions of regions, like cities or routes.
+## Retrieves the locations that can be visited within the games and stores them to Location.
 ## [param name_or_id] is the name or id of a location.
 func get_location(name_or_id) -> void:
 	query = Get.LOCATION
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "location/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "location/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_location(<name_or_id>)")
+	PokeDotClient(url, "location/%s/" % str(name_or_id), "get_location")
 
 
-## Returns the sections of areas, such as floors in a building or cave. Each area has its own set of possible Pokemon encounters.
+## Retrieves the sections of areas, such as floors in a building or cave, and stores them to LocationArea.
 ## [param name_or_id] is the name or id of a location area.
 func get_location_area(name_or_id) -> void:
 	query = Get.LOCATION_AREA
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "location-area/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "location-area/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_location_area(<name_or_id>)")
+	PokeDotClient(url, "location-area/%s/" % str(name_or_id), "get_location_area")
 
 
-## Returns the items that teach moves to Pokemon. They vary from version to version, so it is not certain that one specific TM or HM corresponds to a single Machine.
+## Retrieves the items that teach moves to Pokemon and stores them to Machine.
 ## [param id] is the id of a machine.
 func get_machine(id: int = 0) -> void:
 	query = Get.MACHINE
-	PokeDotClient(url, "machine/%s/" % str(id))
+	PokeDotClient(url, "machine/%s/" % str(id), "get_machine")
 
 
-## Returns the skills of Pokemon in battle. In battle, a Pokemon uses one move each turn. Some moves (including those learned by Hidden Machine) can be used outside of battle as well, usually for the purpose of removing obstacles or exploring new areas.
+## Retrieves the skills of Pokemon in battle and stores them to Move.
 ## [param name_or_id] is the name or id of a move.
 func get_move(name_or_id) -> void:
 	query = Get.MOVE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "move/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "move/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_move(<name_or_id>)")
+	PokeDotClient(url, "move/%s/" % str(name_or_id), "get_move")
 
 
-## Returns the status conditions which are caused by moves used during battle.
+## Retrieves the status conditions which are caused by moves used during battle, and stores them to MoveAilment.
 ## [param name_or_id] is the name or id of a move ailment.
 func get_move_ailment(name_or_id) -> void:
 	query = Get.MOVE_AILMENT
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "move-ailment/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "move-ailment/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_move_ailment(<name_or_id>)")
+	PokeDotClient(url, "move-ailment/%s/" % str(name_or_id), "get_move_ailment")
 
 
-## Returns the styles of moves when used in the Battle Palace.
+## Retrieves the styles of moves when used in the Battle Palace and stores them to MoveBattleStyle.
 ## [param name_or_id] is the name or id of a move battle style.
 func get_move_battle_style(name_or_id) -> void:
 	query = Get.MOVE_BATTLE_STYLE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "move-battle-style/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "move-battle-style/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_move_battle_style(<name_or_id>)")
+	PokeDotClient(url, "move-battle-style/%s/" % str(name_or_id), "get_move_battle_style")
 
 
-## Returns the very general categories that loosely group move effects.
+## Retrieves the very general categories that loosely group move effects and stores them to MoveCategory.
 ## [param name_or_id] is the name or id of a move category.
 func get_move_category(name_or_id) -> void:
 	query = Get.MOVE_CATEGORY
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "move-category/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "move-category/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_move_category(<name_or_id>)")
+	PokeDotClient(url, "move-category/%s/" % str(name_or_id), "get_move_category")
 
 
-## Returns the damage classes moves can have, e.g. physical, special, or non-damaging.
+## Retrieves the damage classes moves can have, e.g. physical, special, or non-damaging, and stores them to MoveDamageClass.
 ## [param name_or_id] is the name or id of a move damage class.
 func get_move_damage_class(name_or_id) -> void:
 	query = Get.MOVE_DAMAGE_CLASS
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "move-damage-class/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "move-damage-class/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_move_damage_class(<name_or_id>)")
+	PokeDotClient(url, "move-damage-class/%s/" % str(name_or_id), "get_move_damage_class")
 
 
-## Returns the methods by which Pokemon can learn moves.
+## Retrieves the methods by which Pokemon can learn moves and stores them to MoveLearnMethod.
 ## [param name_or_id] is the name or id of a move learn method.
 func get_move_learn_method(name_or_id) -> void:
 	query = Get.MOVE_LEARN_METHOD
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "move-learn-method/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "move-learn-method/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_move_learn_method(<name_or_id>)")
+	PokeDotClient(url, "move-learn-method/%s/" % str(name_or_id), "get_move_learn_method")
 
 
-## Returns the targets which moves can be directed at during battle. Targets can be Pokemon, environments or even other moves.
+## Retrieves the targets which moves can be directed at during battle, and stores them to MoveTarget.
 ## [param name_or_id] is the name or id of a move target.
 func get_move_target(name_or_id) -> void:
 	query = Get.MOVE_TARGET
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "move-target/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "move-target/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_move_target(<name_or_id>)")
+	PokeDotClient(url, "move-target/%s/" % str(name_or_id), "get_move_target")
 
 
-## Returns the influence on how a Pokemon's stats grow.
+## Retrieves the influence on how a Pokemon's stats grow, and stores it to Nature.
 ## [param name_or_id] is the name or id of a nature.
 func get_nature(name_or_id) -> void:
 	query = Get.NATURE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "nature/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "nature/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_nature(<name_or_id>)")
+	PokeDotClient(url, "nature/%s/" % str(name_or_id), "get_nature")
 
 
-## Returns the areas used for grouping Pokemon encounters in Pal Park. They're like habitats that are specific to Pal Park.
+## Retrieves the areas used for grouping Pokemon encounters in Pal Park, and stores them to PalParkArea.
 ## [param name_or_id] is the name or id of a Pal Park area.
 func get_pal_park_area(name_or_id) -> void:
 	query = Get.PAL_PARK_AREA
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pal-park-area/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pal-park-area/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pal_park_area(<name_or_id>)")
+	PokeDotClient(url, "pal-park-area/%s/" % str(name_or_id), "get_pal_park_area")
 
 
-## Returns the different attributes of a Pokemon's performance in Pokeathlons. In Pokeathlons, competitions happen on different courses; one for each of the different Pokéathlon stats.
-## [param name_or_id] is the name or id of a Pokeathlon stat.
+## Retrieves the different attributes of a Pokemon's performance in Pokeathlons, and stores them to PokeAthlonStat.
 func get_pokeathlon_stat(name_or_id) -> void:
 	query = Get.POKEATHLON_STAT
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pokeathlon-stat/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pokeathlon-stat/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pokeathlon_stat(<name_or_id>)")
+	PokeDotClient(url, "pokeathlon-stat/%s/" % str(name_or_id), "get_pokeathlon_stat")
 
 
-## Returns a handheld electronic encyclopedia device; one which is capable of recording and retaining information of the various Pokemon in a given region with the exception of the national dex and some smaller dexes related to portions of a region.
+## Retrieves a handheld electronic Pokemon encyclopedia device, and stores it to Pokedex.
 ## [param name_or_id] is the name or id of a Pokedex.
 func get_pokedex(name_or_id) -> void:
 	query = Get.POKEDEX
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pokedex/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pokedex/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pokedex(<name_or_id>)")
+	PokeDotClient(url, "pokedex/%s/" % str(name_or_id), "get_pokedex")
 
 
-## Returns the creatures that inhabit the world of the Pokemon games. They can be caught using Pokéballs and trained by battling with other Pokemon. Each Pokemon belongs to a specific species but may take on a variant which makes it differ from other Pokemon of the same species, such as base stats, available abilities and typings.
+## Retrieves the creatures that inhabit the world of the Pokemon games, and stores them to Pokemon.
 ## [param name_or_id] is the name or id of a Pokemon.
 func get_pokemon(name_or_id) -> void:
 	query = Get.POKEMON
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pokemon/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pokemon/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pokemon(<name_or_id>)")
+	PokeDotClient(url, "pokemon/%s/" % str(name_or_id), "get_pokemon")
 
 
-## Returns the colors used for sorting Pokemon in a Pokedex. The color listed in the Pokedex is usually the color most apparent or covering each Pokemon's body. No orange category exists; Pokemon that are primarily orange are listed as red or brown.
-## [param name_or_id] is the name or id of a Pokemon color.
+## Retrieves the colors used for sorting Pokemon in a Pokedex, and stores them to PokemonColor.
 func get_pokemon_color(name_or_id) -> void:
 	query = Get.POKEMON_COLOR
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pokemon-color/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pokemon-color/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pokemon_color(<name_or_id>)")
+	PokeDotClient(url, "pokemon-color/%s/" % str(name_or_id), "get_pokemon_color")
 
 
-## Returns some visually different forms of a Pokemon. These differences are purely cosmetic. For variations within a Pokemon species, which do differ in more than just visuals, the 'Pokemon' entity is used to represent such a variety.
+## Retrieves some visually different forms of a Pokemon, and stores them to PokemonForm.
 ## [param name_or_id] is the name or id of a Pokemon form.
 func get_pokemon_form(name_or_id) -> void:
 	query = Get.POKEMON_FORM
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pokemon-form/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pokemon-form/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pokemon_form(<name_or_id>)")
+	PokeDotClient(url, "pokemon-form/%s/" % str(name_or_id), "get_pokemon_form")
 
 
-## Returns the different terrain where Pokemon can be found in.
+## Retrieves the different terrain where Pokemon can be found in, and stores them to PokemonHabitat.
 ## [param name_or_id] is the name or id of a Pokemon habitat.
 func get_pokemon_habitat(name_or_id) -> void:
 	query = Get.POKEMON_HABITAT
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pokemon-habitat/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pokemon-habitat/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pokemon_habitat(<name_or_id>)")
+	PokeDotClient(url, "pokemon-habitat/%s/" % str(name_or_id), "get_pokemon_habitat")
 
 
-## Returns the shapes used for sorting Pokemon in a Pokedex.
+## Retrieves the shapes used for sorting Pokemon in a Pokedex, and stores them to PokemonShape.
 ## [param name_or_id] is the name or id of a Pokemon shape.
 func get_pokemon_shape(name_or_id) -> void:
 	query = Get.POKEMON_SHAPE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pokemon-shape/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pokemon-shape/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pokemon_shape(<name_or_id>)")
+	PokeDotClient(url, "pokemon-shape/%s/" % str(name_or_id), "get_pokemon_shape")
 
 
-## Returns the basis for at least one Pokemon. Attributes of a Pokemon species are shared across all varieties of Pokemon within the species. A good example is Wormadam; Wormadam is the species which can be found in three different varieties, Wormadam-Trash, Wormadam-Sandy and Wormadam-Plant.
+## Retrieves the basis for at least one Pokemon and stores it to PokemonSpecies.
 ## [param name_or_id] is the name or id of Pokemon species.
 func get_pokemon_species(name_or_id) -> void:
 	query = Get.POKEMON_SPECIES
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "pokemon-species/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "pokemon-species/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_pokemon_species(<name_or_id>)")
+	PokeDotClient(url, "pokemon-species/%s/" % str(name_or_id), "get_pokemon_species")
 
 
-## Returns an organized area of the Pokemon world. Most often, the main difference between regions is the species of Pokemon that can be encountered within them.
+## Retrieves an organized area of the Pokemon world and stores it to Region.
 ## [param name_or_id] is the name or id of a region.
 func get_region(name_or_id) -> void:
 	query = Get.REGION
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "region/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "region/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_region(<name_or_id>)")
+	PokeDotClient(url, "region/%s/" % str(name_or_id), "get_region")
 
 
-## Returns what determines certain aspects of battles. Each Pokemon has a value for each stat which grows as they gain levels and can be altered momentarily by effects in battles.
-## [param name_or_id] is the name or id of a stat.
+## Retrieves what determines certain aspects of battles and stores them to Stat.
 func get_stat(name_or_id) -> void:
 	query = Get.STAT
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "stat/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "stat/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_stat(<name_or_id>)")
+	PokeDotClient(url, "stat/%s/" % str(name_or_id), "get_stat")
 
 
-## Returns the effects of moves when used in super contests.
+## Retrieves the effects of moves when used in super contests, and stores them to SuperContestEffect.
 ## [param name_or_id] is the name or id of a super contest effect.
 func get_super_contest_effect(name_or_id) -> void:
 	query = Get.SUPER_CONTEST_EFFECT
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "super-contest-effect/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "super-contest-effect/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_super_contest_effect(<name_or_id>)")
+	PokeDotClient(url, "super-contest-effect/%s/" % str(name_or_id), "get_super_contest_effect")
 
 
-## Returns the properties for Pokemon and their moves. Each type has three properties: which types of Pokemon it is super effective against, which types of Pokemon it is not very effective against, and which types of Pokemon it is completely ineffective against.
+## Retrieves the properties for Pokemon and their moves and stores them to Type.
 ## [param name_or_id] is the name or id of a Pokemon type.
 func get_type(name_or_id) -> void:
 	query = Get.TYPE
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "type/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "type/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_type(<name_or_id>)")
+	PokeDotClient(url, "type/%s/" % str(name_or_id), "get_type")
 
 
-## Returns the versions of the games, e.g., Red, Blue or Yellow.
+## Retrieves the versions of the games, e.g., Red, Blue or Yellow, and stores them to Version.
 ## [param name_or_id] is the name or id of a Pokemon version.
 func get_version(name_or_id) -> void:
 	query = Get.VERSION
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "version/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "version/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_version(<name_or_id>)")
+	PokeDotClient(url, "version/%s/" % str(name_or_id), "get_version")
 
 
-## Returns the version groups which categorize highly similar versions of the games.
+## Retrieves the version groups which categorize highly similar versions of the games, and stores them to VersionGroup.
 ## [param name_or_id] is the name or id of a Pokemon version group.
 func get_version_group(name_or_id) -> void:
 	query = Get.VERSION_GROUP
-	match typeof(name_or_id):
-		TYPE_STRING: PokeDotClient(url, "version-group/%s/" % name_or_id)
-		TYPE_INT: PokeDotClient(url, "version-group/%s/" % str(name_or_id))
-		_: printerr(NAME_ID_ERROR % "get_version_group(<name_or_id>)")
+	PokeDotClient(url, "version-group/%s/" % str(name_or_id), "get_version_group")
 
 
 func _on_request_completed(result, response_code, headers, body) -> void:
-	var data: Dictionary = _parse_JSON(body)
-	print("HTTP request result code: %s" % _get_result(result))
-	print("HTTP request response code: %s\n" % _get_response(response_code))
-	print("%s\n" % JSON.stringify(headers, "  "))
-	#print(JSON.print(data, "  "))
+	var data: Variant = null
 
-	match query:
-		Get.POKEMON_PAGINATION:
-			pokemon_pagination.set_data(
-				data.get("count"),
-				data.get("next"),
-				data.get("previous"),
-				data.get("results")
-			)
-			print(JSON.stringify(pokemon_pagination.get_data(), "  "))
+	if print_result == true:
+		if result == RESULT_SUCCESS:
+			print("✓ HTTP request result code: %s" % _get_result(result))
+		else:
+			print("❌ HTTP request failed. Error: %s" % _get_result(result))
 
-		Get.ABILITY:
-			ability.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("is_main_series"),
-				data.get("generation"),
-				data.get("names"),
-				data.get("effect_entries"),
-				data.get("effect_changes"),
-				data.get("flavor_text_entries"),
-				data.get("pokemon")
-			)
-			print(JSON.stringify(ability.get_data(), "  "))
+	if response_code == HTTPClient.RESPONSE_OK:
+		if print_response == true:
+			print("✓ HTTP request response code: %s\n" % _get_response(response_code))
 
-		Get.BERRY:
-			berry.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("growth_time"),
-				data.get("max_harvest"),
-				data.get("natural_gift_power"),
-				data.get("size"),
-				data.get("smoothness"),
-				data.get("soil_dryness"),
-				data.get("firmness"),
-				data.get("flavors"),
-				data.get("item"),
-				data.get("natural_gift_type")
-			)
-			print(JSON.stringify(berry.get_data(), "  "))
+		data = _parse_JSON(body)
+		match query:
+			Get.POKEMON_PAGINATION:
+				pokemon_pagination.set_data(
+					data.get("count"),
+					data.get("next"),
+					data.get("previous"),
+					data.get("results")
+				)
 
-		Get.BERRY_FLAVOR:
-			berry_flavor.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("berries"),
-				data.get("contest_type"),
-				data.get("names")
-			)
-			print(JSON.stringify(berry_flavor.get_data(), "  "))
+			Get.ABILITY:
+				ability.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("is_main_series"),
+					data.get("generation"),
+					data.get("names"),
+					data.get("effect_entries"),
+					data.get("effect_changes"),
+					data.get("flavor_text_entries"),
+					data.get("pokemon")
+				)
 
-		Get.BERRY_FIRMNESS:
-			berry_firmness.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("berries"),
-				data.get("names")
-			)
-			print(JSON.stringify(berry_firmness.get_data(), "  "))
+			Get.BERRY:
+				berry.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("growth_time"),
+					data.get("max_harvest"),
+					data.get("natural_gift_power"),
+					data.get("size"),
+					data.get("smoothness"),
+					data.get("soil_dryness"),
+					data.get("firmness"),
+					data.get("flavors"),
+					data.get("item"),
+					data.get("natural_gift_type")
+				)
 
-		Get.CHARACTERISTIC:
-			characteristic.set_data(
-				data.get("id"),
-				data.get("gene_modulo"),
-				data.get("possible_values"),
-				data.get("highest_stat"),
-				data.get("descriptions")
-			)
-			print(JSON.stringify(characteristic.get_data(), "  "))
+			Get.BERRY_FLAVOR:
+				berry_flavor.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("berries"),
+					data.get("contest_type"),
+					data.get("names")
+				)
 
-		Get.CONTEST_EFFECT:
-			contest_effect.set_data(
-				data.get("id"),
-				data.get("appeal"),
-				data.get("jam"),
-				data.get("effect_entries"),
-				data.get("flavor_text_entries")
-			)
-			print(JSON.stringify(contest_effect.get_data(), "  "))
+			Get.BERRY_FIRMNESS:
+				berry_firmness.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("berries"),
+					data.get("names")
+				)
 
-		Get.CONTEST_TYPE:
-			contest_type.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("berry_flavor"),
-				data.get("names")
-			)
-			print(JSON.stringify(contest_type.get_data(), "  "))
+			Get.CHARACTERISTIC:
+				characteristic.set_data(
+					data.get("id"),
+					data.get("gene_modulo"),
+					data.get("possible_values"),
+					data.get("highest_stat"),
+					data.get("descriptions")
+				)
 
-		Get.EGG_GROUP:
-			egg_group.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("names"),
-				data.get("pokemon_species")
-			)
-			print(JSON.stringify(egg_group.get_data(), "  "))
+			Get.CONTEST_EFFECT:
+				contest_effect.set_data(
+					data.get("id"),
+					data.get("appeal"),
+					data.get("jam"),
+					data.get("effect_entries"),
+					data.get("flavor_text_entries")
+				)
 
-		Get.ENCOUNTER_CONDITION:
-			encounter_condition.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("values"),
-				data.get("names")
-			)
-			print(JSON.stringify(encounter_condition.get_data(), "  "))
+			Get.CONTEST_TYPE:
+				contest_type.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("berry_flavor"),
+					data.get("names")
+				)
 
-		Get.ENCOUNTER_CONDITION_VALUE:
-			encounter_condition_value.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("condition"),
-				data.get("names")
-			)
-			print(JSON.stringify(encounter_condition_value.get_data(), "  "))
+			Get.EGG_GROUP:
+				egg_group.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("names"),
+					data.get("pokemon_species")
+				)
 
-		Get.ENCOUNTER_METHOD:
-			encounter_method.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("order"),
-				data.get("names")
-			)
-			print(JSON.stringify(encounter_method.get_data(), "  "))
+			Get.ENCOUNTER_CONDITION:
+				encounter_condition.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("values"),
+					data.get("names")
+				)
 
-		Get.EVOLUTION_CHAIN:
-			evolution_chain.set_data(
-				data.get("id"),
-				data.get("baby_trigger_item"),
-				data.get("chain")
-			)
-			print(JSON.stringify(evolution_chain.get_data(), "  "))
+			Get.ENCOUNTER_CONDITION_VALUE:
+				encounter_condition_value.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("condition"),
+					data.get("names")
+				)
 
-		Get.EVOLUTION_TRIGGER:
-			evolution_trigger.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("names"),
-				data.get("pokemon_species")
-			)
-			print(JSON.stringify(evolution_trigger.get_data(), "  "))
+			Get.ENCOUNTER_METHOD:
+				encounter_method.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("order"),
+					data.get("names")
+				)
 
-		Get.GENDER:
-			gender.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("pokemon_species_details"),
-				data.get("required_for_evolution")
-			)
-			print(JSON.stringify(gender.get_data(), "  "))
+			Get.EVOLUTION_CHAIN:
+				evolution_chain.set_data(
+					data.get("id"),
+					data.get("baby_trigger_item"),
+					data.get("chain")
+				)
 
-		Get.GENERATION:
-			generation.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("abilities"),
-				data.get("main_region"),
-				data.get("moves"),
-				data.get("names"),
-				data.get("pokemon_species"),
-				data.get("types"),
-				data.get("version_groups")
-			)
-			print(JSON.stringify(generation.get_data(), "  "))
+			Get.EVOLUTION_TRIGGER:
+				evolution_trigger.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("names"),
+					data.get("pokemon_species")
+				)
 
-		Get.GROWTH_RATE:
-			growth_rate.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("formula"),
-				data.get("descriptions"),
-				data.get("levels"),
-				data.get("pokemon_species")
-			)
-			print(JSON.stringify(growth_rate.get_data(), "  "))
+			Get.GENDER:
+				gender.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("pokemon_species_details"),
+					data.get("required_for_evolution")
+				)
 
-		Get.ITEM:
-			item.set_data(
-				data.get("attributes"),
-				data.get("category"),
-				data.get("effect_entries"),
-				data.get("flavor_text_entries"),
-				data.get("game_indices"),
-				data.get("names"),
-				data.get("sprites"),
-				data.get("held_by_pokemon"),
-				data.get("baby_trigger_for")
-			)
-			print(JSON.stringify(item.get_data(), "  "))
+			Get.GENERATION:
+				generation.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("abilities"),
+					data.get("main_region"),
+					data.get("moves"),
+					data.get("names"),
+					data.get("pokemon_species"),
+					data.get("types"),
+					data.get("version_groups")
+				)
 
-		Get.ITEM_ATTRIBUTE:
-			item_attribute.set_data(
-				data.get("descriptions"),
-				data.get("id"),
-				data.get("items"),
-				data.get("name"),
-				data.get("names")
-			)
-			print(JSON.stringify(item_attribute.get_data(), "  "))
+			Get.GROWTH_RATE:
+				growth_rate.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("formula"),
+					data.get("descriptions"),
+					data.get("levels"),
+					data.get("pokemon_species")
+				)
 
-		Get.ITEM_CATEGORY:
-			item_category.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("items"),
-				data.get("names"),
-				data.get("pocket")
-			)
-			print(JSON.stringify(item_category.get_data(), "  "))
+			Get.ITEM:
+				item.set_data(
+					data.get("attributes"),
+					data.get("category"),
+					data.get("effect_entries"),
+					data.get("flavor_text_entries"),
+					data.get("game_indices"),
+					data.get("names"),
+					data.get("sprites"),
+					data.get("held_by_pokemon"),
+					data.get("baby_trigger_for")
+				)
 
-		Get.ITEM_FLING_EFFECT:
-			item_fling_effect.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("effect_entries"),
-				data.get("items")
-			)
-			print(JSON.stringify(item_fling_effect.get_data(), "  "))
+			Get.ITEM_ATTRIBUTE:
+				item_attribute.set_data(
+					data.get("descriptions"),
+					data.get("id"),
+					data.get("items"),
+					data.get("name"),
+					data.get("names")
+				)
 
-		Get.ITEM_POCKET:
-			item_pocket.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("categories"),
-				data.get("names")
-			)
-			print(JSON.stringify(item_pocket.get_data(), "  "))
+			Get.ITEM_CATEGORY:
+				item_category.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("items"),
+					data.get("names"),
+					data.get("pocket")
+				)
 
-		Get.LANGUAGE:
-			language.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("official"),
-				data.get("iso639"),
-				data.get("iso3166"),
-				data.get("names")
-			)
-			print(JSON.stringify(language.get_data(), "  "))
+			Get.ITEM_FLING_EFFECT:
+				item_fling_effect.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("effect_entries"),
+					data.get("items")
+				)
 
-		Get.LOCATION:
-			location.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("region"),
-				data.get("names"),
-				data.get("game_indices"),
-				data.get("areas")
-			)
-			print(JSON.stringify(location.get_data(), "  "))
+			Get.ITEM_POCKET:
+				item_pocket.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("categories"),
+					data.get("names")
+				)
 
-		Get.LOCATION_AREA:
-			location_area.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("game_index"),
-				data.get("encounter_method_rates"),
-				data.get("location"),
-				data.get("names"),
-				data.get("pokemon_encounters")
-			)
-			print(JSON.stringify(location_area.get_data(), "  "))
+			Get.LANGUAGE:
+				language.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("official"),
+					data.get("iso639"),
+					data.get("iso3166"),
+					data.get("names")
+				)
 
-		Get.MACHINE:
-			machine.set_data(
-				data.get("id"),
-				data.get("item"),
-				data.get("move"),
-				data.get("version_group")
-			)
-			print(JSON.stringify(machine.get_data(), "  "))
+			Get.LOCATION:
+				location.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("region"),
+					data.get("names"),
+					data.get("game_indices"),
+					data.get("areas")
+				)
 
-		Get.MOVE:
-			move.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("accuracy"),
-				data.get("effect_chance"),
-				data.get("pp"),
-				data.get("priority"),
-				data.get("power"),
-				data.get("contest_combos"),
-				data.get("contest_type"),
-				data.get("contest_effect"),
-				data.get("damage_class"),
-				data.get("effect_entries"),
-				data.get("effect_changes"),
-				data.get("generation"),
-				data.get("meta"),
-				data.get("names"),
-				data.get("past_values"),
-				data.get("stat_changes"),
-				data.get("super_contest_effect"),
-				data.get("target"),
-				data.get("type"),
-				data.get("learned_by_pokemon"),
-				data.get("flavor_text_entries")
-			)
-			print(JSON.stringify(move.get_data(), "  "))
+			Get.LOCATION_AREA:
+				location_area.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("game_index"),
+					data.get("encounter_method_rates"),
+					data.get("location"),
+					data.get("names"),
+					data.get("pokemon_encounters")
+				)
 
-		Get.MOVE_AILMENT:
-			move_ailment.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("moves"),
-				data.get("names")
-			)
-			print(JSON.stringify(move_ailment.get_data(), "  "))
+			Get.MACHINE:
+				machine.set_data(
+					data.get("id"),
+					data.get("item"),
+					data.get("move"),
+					data.get("version_group")
+				)
 
-		Get.MOVE_BATTLE_STYLE:
-			move_battle_style.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("names")
-			)
-			print(JSON.stringify(move_battle_style.get_data(), "  "))
+			Get.MOVE:
+				move.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("accuracy"),
+					data.get("effect_chance"),
+					data.get("pp"),
+					data.get("priority"),
+					data.get("power"),
+					data.get("contest_combos"),
+					data.get("contest_type"),
+					data.get("contest_effect"),
+					data.get("damage_class"),
+					data.get("effect_entries"),
+					data.get("effect_changes"),
+					data.get("generation"),
+					data.get("meta"),
+					data.get("names"),
+					data.get("past_values"),
+					data.get("stat_changes"),
+					data.get("super_contest_effect"),
+					data.get("target"),
+					data.get("type"),
+					data.get("learned_by_pokemon"),
+					data.get("flavor_text_entries")
+				)
 
-		Get.MOVE_CATEGORY:
-			move_category.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("descriptions"),
-				data.get("moves")
-			)
-			print(JSON.stringify(move_category.get_data(), "  "))
+			Get.MOVE_AILMENT:
+				move_ailment.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("moves"),
+					data.get("names")
+				)
 
-		Get.MOVE_DAMAGE_CLASS:
-			move_damage_class.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("descriptions"),
-				data.get("moves")
-			)
-			print(JSON.stringify(move_damage_class.get_data(), "  "))
+			Get.MOVE_BATTLE_STYLE:
+				move_battle_style.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("names")
+				)
 
-		Get.MOVE_LEARN_METHOD:
-			move_learn_method.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("names"),
-				data.get("descriptions"),
-				data.get("version_groups")
-			)
-			print(JSON.stringify(move_learn_method.get_data(), "  "))
+			Get.MOVE_CATEGORY:
+				move_category.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("descriptions"),
+					data.get("moves")
+				)
 
-		Get.MOVE_TARGET:
-			move_target.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("descriptions"),
-				data.get("moves"),
-				data.get("names")
-			)
-			print(JSON.stringify(move_target.get_data(), "  "))
+			Get.MOVE_DAMAGE_CLASS:
+				move_damage_class.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("descriptions"),
+					data.get("moves")
+				)
 
-		Get.NATURE:
-			nature.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("decreased_stat"),
-				data.get("increased_stat"),
-				data.get("likes_flavor"),
-				data.get("hates_flavor"),
-				data.get("pokeathlon_stat_changes"),
-				data.get("move_battle_style_preferences"),
-				data.get("names")
-			)
-			print(JSON.stringify(nature.get_data(), "  "))
+			Get.MOVE_LEARN_METHOD:
+				move_learn_method.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("names"),
+					data.get("descriptions"),
+					data.get("version_groups")
+				)
 
-		Get.PAL_PARK_AREA:
-			pal_park_area.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("names"),
-				data.get("pokemon_encounters")
-			)
-			print(JSON.stringify(pal_park_area.get_data(), "  "))
+			Get.MOVE_TARGET:
+				move_target.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("descriptions"),
+					data.get("moves"),
+					data.get("names")
+				)
 
-		Get.POKEATHLON_STAT:
-			pokeathlon_stat.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("affecting_natures"),
-				data.get("names")
-			)
-			print(JSON.stringify(pokeathlon_stat.get_data(), "  "))
+			Get.NATURE:
+				nature.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("decreased_stat"),
+					data.get("increased_stat"),
+					data.get("likes_flavor"),
+					data.get("hates_flavor"),
+					data.get("pokeathlon_stat_changes"),
+					data.get("move_battle_style_preferences"),
+					data.get("names")
+				)
 
-		Get.POKEDEX:
-			pokedex.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("is_main_series"),
-				data.get("descriptions"),
-				data.get("names"),
-				data.get("pokemon_entries"),
-				data.get("region"),
-				data.get("version_groups")
-			)
-			print(JSON.stringify(pokedex.get_data(), "  "))
+			Get.PAL_PARK_AREA:
+				pal_park_area.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("names"),
+					data.get("pokemon_encounters")
+				)
 
-		Get.POKEMON:
-			pokemon.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("base_experience"),
-				data.get("height"),
-				data.get("is_default"),
-				data.get("order"),
-				data.get("weight"),
-				data.get("abilities"),
-				data.get("forms"),
-				data.get("game_indices"),
-				data.get("held_items"),
-				data.get("location_area_encounters"),
-				data.get("moves"),
-				data.get("species"),
-				data.get("sprites"),
-				data.get("cries"),
-				data.get("stats"),
-				data.get("types"),
-				data.get("past_types"),
-				data.get("past_abilities")
-			)
-			print(JSON.stringify(pokemon.get_data(), "  "))
+			Get.POKEATHLON_STAT:
+				pokeathlon_stat.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("affecting_natures"),
+					data.get("names")
+				)
 
-		Get.POKEMON_COLOR:
-			pokemon_color.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("names"),
-				data.get("pokemon_species")
-			)
-			print(JSON.stringify(pokemon_color.get_data(), "  "))
+			Get.POKEDEX:
+				pokedex.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("is_main_series"),
+					data.get("descriptions"),
+					data.get("names"),
+					data.get("pokemon_entries"),
+					data.get("region"),
+					data.get("version_groups")
+				)
 
-		Get.POKEMON_FORM:
-			pokemon_form.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("order"),
-				data.get("form_order"),
-				data.get("is_default"),
-				data.get("is_battle_only"),
-				data.get("is_mega"),
-				data.get("form_name"),
-				data.get("pokemon"),
-				data.get("sprites"),
-				data.get("types"),
-				data.get("version_group")
-			)
-			print(JSON.stringify(pokemon_form.get_data(), "  "))
+			Get.POKEMON:
+				pokemon.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("base_experience"),
+					data.get("height"),
+					data.get("is_default"),
+					data.get("order"),
+					data.get("weight"),
+					data.get("abilities"),
+					data.get("forms"),
+					data.get("game_indices"),
+					data.get("held_items"),
+					data.get("location_area_encounters"),
+					data.get("moves"),
+					data.get("species"),
+					data.get("sprites"),
+					data.get("cries"),
+					data.get("stats"),
+					data.get("types"),
+					data.get("past_types"),
+					data.get("past_abilities")
+				)
 
-		Get.POKEMON_HABITAT:
-			pokemon_habitat.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("names"),
-				data.get("pokemon_species")
-			)
-			print(JSON.stringify(pokemon_habitat.get_data(), "  "))
+			Get.POKEMON_COLOR:
+				pokemon_color.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("names"),
+					data.get("pokemon_species")
+				)
 
-		Get.POKEMON_SHAPE:
-			pokemon_shape.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("awesome_names"),
-				data.get("names"),
-				data.get("pokemon_species")
-			)
-			print(JSON.stringify(pokemon_shape.get_data(), "  "))
+			Get.POKEMON_FORM:
+				pokemon_form.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("order"),
+					data.get("form_order"),
+					data.get("is_default"),
+					data.get("is_battle_only"),
+					data.get("is_mega"),
+					data.get("form_name"),
+					data.get("pokemon"),
+					data.get("sprites"),
+					data.get("types"),
+					data.get("version_group")
+				)
 
-		Get.POKEMON_SPECIES:
-			pokemon_species.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("order"),
-				data.get("gender_rate"),
-				data.get("capture_rate"),
-				data.get("base_happiness"),
-				data.get("is_baby"),
-				data.get("is_legendary"),
-				data.get("is_mythical"),
-				data.get("hatch_counter"),
-				data.get("has_gender_differences"),
-				data.get("forms_switchable"),
-				data.get("growth_rate"),
-				data.get("pokedex_numbers"),
-				data.get("egg_groups"),
-				data.get("color"),
-				data.get("shape"),
-				data.get("evolves_from_species"),
-				data.get("evolution_chain"),
-				data.get("habitat"),
-				data.get("generation"),
-				data.get("names"),
-				data.get("flavor_text_entries"),
-				data.get("form_descriptions"),
-				data.get("genera"),
-				data.get("varieties")
-			)
-			print(JSON.stringify(pokemon_species.get_data(), "  "))
+			Get.POKEMON_HABITAT:
+				pokemon_habitat.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("names"),
+					data.get("pokemon_species")
+				)
 
-		Get.REGION:
-			region.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("locations"),
-				data.get("main_generation"),
-				data.get("names"),
-				data.get("pokedexes"),
-				data.get("version_groups")
-			)
-			print(JSON.stringify(region.get_data(), "  "))
+			Get.POKEMON_SHAPE:
+				pokemon_shape.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("awesome_names"),
+					data.get("names"),
+					data.get("pokemon_species")
+				)
 
-		Get.STAT:
-			stat.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("game_index"),
-				data.get("is_battle_only"),
-				data.get("affecting_moves"),
-				data.get("affecting_natures"),
-				data.get("characteristics"),
-				data.get("move_damage_class"),
-				data.get("names")
-			)
-			print(JSON.stringify(stat.get_data(), "  "))
+			Get.POKEMON_SPECIES:
+				pokemon_species.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("order"),
+					data.get("gender_rate"),
+					data.get("capture_rate"),
+					data.get("base_happiness"),
+					data.get("is_baby"),
+					data.get("is_legendary"),
+					data.get("is_mythical"),
+					data.get("hatch_counter"),
+					data.get("has_gender_differences"),
+					data.get("forms_switchable"),
+					data.get("growth_rate"),
+					data.get("pokedex_numbers"),
+					data.get("egg_groups"),
+					data.get("color"),
+					data.get("shape"),
+					data.get("evolves_from_species"),
+					data.get("evolution_chain"),
+					data.get("habitat"),
+					data.get("generation"),
+					data.get("names"),
+					data.get("flavor_text_entries"),
+					data.get("form_descriptions"),
+					data.get("genera"),
+					data.get("varieties")
+				)
 
-		Get.SUPER_CONTEST_EFFECT:
-			super_contest_effect.set_data(
-				data.get("id"),
-				data.get("appeal"),
-				data.get("flavor_text_entries"),
-				data.get("moves")
-			)
-			print(JSON.stringify(super_contest_effect.get_data(), "  "))
+			Get.REGION:
+				region.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("locations"),
+					data.get("main_generation"),
+					data.get("names"),
+					data.get("pokedexes"),
+					data.get("version_groups")
+				)
 
-		Get.TYPE:
-			type.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("damage_relations"),
-				data.get("past_damage_relations"),
-				data.get("game_indices"),
-				data.get("generation"),
-				data.get("move_damage_class"),
-				data.get("names"),
-				data.get("pokemon"),
-				data.get("moves")
-			)
-			print(JSON.stringify(type.get_data(), "  "))
+			Get.STAT:
+				stat.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("game_index"),
+					data.get("is_battle_only"),
+					data.get("affecting_moves"),
+					data.get("affecting_natures"),
+					data.get("characteristics"),
+					data.get("move_damage_class"),
+					data.get("names")
+				)
 
-		Get.VERSION:
-			version.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("names"),
-				data.get("version_group")
-			)
-			print(JSON.stringify(version.get_data(), "  "))
+			Get.SUPER_CONTEST_EFFECT:
+				super_contest_effect.set_data(
+					data.get("id"),
+					data.get("appeal"),
+					data.get("flavor_text_entries"),
+					data.get("moves")
+				)
 
-		Get.VERSION_GROUP:
-			version_group.set_data(
-				data.get("id"),
-				data.get("name"),
-				data.get("order"),
-				data.get("generation"),
-				data.get("move_learn_methods"),
-				data.get("pokedexes"),
-				data.get("regions"),
-				data.get("versions")
-			)
-			print(JSON.stringify(version_group.get_data(), "  "))
+			Get.TYPE:
+				type.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("damage_relations"),
+					data.get("past_damage_relations"),
+					data.get("game_indices"),
+					data.get("generation"),
+					data.get("move_damage_class"),
+					data.get("names"),
+					data.get("pokemon"),
+					data.get("moves")
+				)
+
+			Get.VERSION:
+				version.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("names"),
+					data.get("version_group")
+				)
+
+			Get.VERSION_GROUP:
+				version_group.set_data(
+					data.get("id"),
+					data.get("name"),
+					data.get("order"),
+					data.get("generation"),
+					data.get("move_learn_methods"),
+					data.get("pokedexes"),
+					data.get("regions"),
+					data.get("versions")
+				)
+
+	else:
+		if print_response == true:
+			print("❌ Validation Error! HTTP request response code: %s\n" % _get_response(response_code))
+
+	if print_headers == true:
+		print("%s\n" % JSON.stringify(headers, "  "))
 
 
 ## Parses JSON and returns as Dictionary.
@@ -1195,13 +1029,16 @@ func _parse_JSON(body: PackedByteArray) -> Dictionary:
 	if error == OK:
 		var data_got: Variant = json.data
 		if typeof(data_got) == TYPE_DICTIONARY:
-			#print(JSON.stringify(data_got, "\t"))
+			if print_data == true:
+				print(JSON.stringify(data_got, "\t")+"\n")
 			return data_got
 		else:
-			print("Unexpected data.\n")
+			if print_data == true:
+				print("❌ _parse_JSON() failed. Unexpected data.")
 			return {}
 	else:
-		print("JSON Parse Error: ", json.get_error_message(), " in ", string, " at line ", json.get_error_line(), ".\n")
+		if print_data == true:
+			print("❌ _parse_JSON() error: ", json.get_error_message(), " in ", string, " at line ", json.get_error_line(), ".")
 		return {}
 
 
