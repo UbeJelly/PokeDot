@@ -607,8 +607,8 @@ func get_version_group(name_or_id) -> void:
 
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Dictionary = _parse_JSON(body)
-	print("HTTP result code: %s" % _get_result(result))
-	print("HTTP response code: %s\n" % _get_response(response_code))
+	print("HTTP request result code: %s" % _get_result(result))
+	print("HTTP request response code: %s\n" % _get_response(response_code))
 	print("%s\n" % JSON.stringify(headers, "  "))
 	#print(JSON.print(data, "  "))
 
