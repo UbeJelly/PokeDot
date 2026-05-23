@@ -240,13 +240,15 @@ These are the available functions to be used with this API wrapper.
 
 ## Main function
 
-- `PokeDotClient(main_url, endpoint)` - is the main function that starts `HTTPRequest` for any data. Returns a request error.
+- `PokeDotClient(main_url, endpoint, method)` - is the main function that starts `HTTPRequest` for any data. Returns a request error.
   - `main_url` - is the main URL. Currently uses PokeAPI v2.
   - `endpoint` - is the API endpoint to request data from.
+  - `method` - is the name of the method, e.g. 'get_ability', to return their request status.
 
 ## API calls
-The actual functions that handles requests and retrieves data. The data are stored to respective objects under the `Data` directory, e.g. `get_berry()` → `Berry.gd`.  
-For more info check `Documentation` at https://pokeapi.co/docs/v2.
+The actual functions that handles requests and retrieves data. The data are stored to respective objects under the `Data` directory, e.g. `get_berry()` → `Berry.gd`.
+
+For more info check out the official documentation at https://pokeapi.co/docs/v2.
 
 - `get_pokemon_pagination(endpoint, limit, offset)` - retrieves a list of Pokemons on a page and its position and stores it to `PokemonPagination`.
   - `endpoint` - is the API endpoint to request data from. "pokemon" by default
