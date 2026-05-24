@@ -138,7 +138,7 @@ Request endpoint: https://pokeapi.co/api/v2/pokemon/ditto/
 
 ---
 
-### Creating an object to hold data
+#### Creating an object to hold data
 Just as we can instance and add a PokeDotClient as a child to our main scene, we can also do the same to our data containers in `res://Data`.
 
 For this example we'll create a new Pokemon object for Pikachu.
