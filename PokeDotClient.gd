@@ -1,5 +1,6 @@
 class_name PokeDotClient extends HTTPRequest
 
+#region Variables
 enum Get {
 	POKEMON_PAGINATION,
 	ABILITY,
@@ -52,19 +53,20 @@ enum Get {
 	VERSION_GROUP
 }
 
-const NAME_ID_ERROR: String = "ERROR: %s, <name_or_id> must be an int or String type."
+const NAME_ID_ERROR := "ERROR: %s, <name_or_id> must be an int or String type."
 
 ## INFO: Toggle the visibility of callback status or requested data on terminal.
 @export_category("Console Texts")
-@export var print_stat: bool = true			## Show or hide the status of functions.
-@export var print_data: bool = true			## Show or hide the requested data.
-@export var print_result: bool = true		## Show or hide the result of requests.
-@export var print_response: bool = true		## Show or hide the response of requests.
-@export var print_headers: bool = false		## Show or hide the headers of requests.
+@export var print_stat := true			## Show or hide the status of functions.
+@export var print_data := true			## Show or hide the requested data.
+@export var print_result := true		## Show or hide the result of requests.
+@export var print_response := true		## Show or hide the response of requests.
+@export var print_headers := false		## Show or hide the headers of requests.
 
-var url: String = "https://pokeapi.co/api/v2/"
-var query: int = 0
+var url := "https://pokeapi.co/api/v2/"
+var query := 0
 
+#region Data containers
 @onready var pokemon_pagination := PokemonPagination.new()
 @onready var ability := Ability.new()
 @onready var berry := Berry.new()
@@ -114,13 +116,14 @@ var query: int = 0
 @onready var type := Type.new()
 @onready var version := Version.new()
 @onready var version_group := VersionGroup.new()
-
+#endregion
+#endregion
 
 ## Main client that starts [param HTTPRequest] for any data. Returns a request error.
 ## [param main_url] is the main URL. Currently uses PokeAPI v2.
 ## [param endpoint] is the API endpoint to request data from.
 ## [param method] is the name of the method, e.g. 'get_ability', to return their request status.
-func PokeDotClient(main_url: String = url, endpoint: String = "", method: String = "") -> void:
+func PokeDotClient(main_url: String, endpoint: String, method: String) -> void:
 	print("Request endpoint: %s" % main_url + endpoint + "\n")
 
 	if not main_url == "" or not endpoint == "":
@@ -131,7 +134,7 @@ func PokeDotClient(main_url: String = url, endpoint: String = "", method: String
 	else:
 		print("❌ PokeDotClient() failed. The main_url or endpoint cannot be empty.")
 
-
+#region API Calls
 ## Retrieves a list of Pokemons on a page and its position and stores it to PokemonPagination.
 ## [param endpoint] is the API endpoint to request data from. "pokemon" by default
 ## [param limit] is the number of Pokemons in a page. 20 items by default
@@ -472,7 +475,7 @@ func get_version(name_or_id) -> void:
 func get_version_group(name_or_id) -> void:
 	query = Get.VERSION_GROUP
 	PokeDotClient(url, "version-group/%s/" % str(name_or_id), "get_version_group")
-
+#endregion
 
 func _on_request_completed(result, response_code, headers, body) -> void:
 	var data: Variant = null

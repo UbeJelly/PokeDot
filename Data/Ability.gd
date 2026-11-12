@@ -1,4 +1,8 @@
 class_name Ability extends Node
+## Data container for Pokemon's abilities.
+## 
+## Abilities provide passive effects for Pokemon in battle or in the overworld.
+## Pokemon have multiple possible abilities but can have only one ability at a time.
 
 
 @export var data: Dictionary = {
@@ -70,6 +74,16 @@ class_name Ability extends Node
 }
 
 
+## Sets ability data through Dictionary.
+## [param id] is the id of an ability.
+## [param _name] is the name of an ability.
+## [param is_main_series] tells whether an ability comes from the main series or not.
+## [param generation] refers to what generations an ability belongs to.
+## [param names] are ability's names in different languages.
+## [param effect_entries] are ability's effects.
+## [param effect_changes] are changes to an ability's effects.
+## [param flavor_text_entries] are the short descriptions on how an ability is executed.
+## [param pokemon] are the Pokemons who have this ability.
 func set_data(id: int = 0, _name: String = "", is_main_series: bool = true, generation: Dictionary = {}, names: Array = [], effect_entries: Array = [], effect_changes: Array = [], flavor_text_entries: Array = [], pokemon: Array = []) -> void:
 	data = {
 		"id": id,
@@ -84,5 +98,6 @@ func set_data(id: int = 0, _name: String = "", is_main_series: bool = true, gene
 	}
 
 
+## Get the ability data after requesting it.
 func get_data() -> Dictionary:
 	return data

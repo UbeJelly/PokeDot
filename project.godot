@@ -12,11 +12,12 @@ config_version=5
 
 config/name="PokeDot"
 config/description="A Pokemon API wrapper for Godot 4. It currently uses PokéApi's v2 API."
+config/tags=PackedStringArray("completed", "done", "priority")
 run/main_scene="res://PokeDotClient.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="PokeDotClient"
-config/features=PackedStringArray("4.6")
-config/icon="res://icon.png"
+config/features=PackedStringArray("4.7")
+config/icon="uid://bopbv50xksc3h"
 
 [display]
 
